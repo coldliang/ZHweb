@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9293864b-c34a-45af-9fcb-522fe3ffeed3" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="9293864b-c34a-45af-9fcb-522fe3ffeed3" name="Default" comment="" />
     <ignored path="智慧脑图.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -431,12 +428,12 @@
       <workItem from="1494635790344" duration="29958000" />
       <workItem from="1494745293697" duration="20195000" />
       <workItem from="1494779110379" duration="11571000" />
-      <workItem from="1494824432920" duration="277000" />
+      <workItem from="1494824432920" duration="791000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="62118000" />
+    <option name="totallyTimeSpent" value="62632000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1096" extended-state="7" />
