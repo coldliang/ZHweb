@@ -51,11 +51,37 @@
                     </div>
                     <span class="glyphicon glyphicon-star pull-right"></span>
                 </div>
+                <div class="wellBottom row text-center">
+                    <div class="col-sm-4"><span class="glyphicon glyphicon-heart-empty"></span></div>
+                    <div class="col-sm-4" ng-click="openComment($index,x.ntId)"><span class="glyphicon glyphicon-edit"></span>{{x.ctNum}}</div>
+                    <div class="col-sm-4"><span class="glyphicon glyphicon-thumbs-up"></span></div>
+                </div>
+                <div class="comment" ng-show="x.commentShow">
+
+                    <!--添加评论-->
+                    <form class="bs-example bs-example-form" role="form" novalidate>
+                        <div class="input-group">
+                            <input type="text" class="form-control" ng-model="commentSubmitText.text" placeholder="说出你的想法">
+                            <span class="input-group-btn">
+                                <button ng-click="commentSubmit(x.ntId,$index)" class="btn btn-default">评论</button>
+                            </span>
+                        </div><!-- /input-group -->
+                    </form>
+
+                    <!--展示评论-->
+                    <div ng-repeat="y in commentData" class="commentText">
+                        <div class="pull-right" style="font-size: 12px;color: #888">{{y.ctTime}}</div>
+                        <div style="font-size: 12px;color: #3A80C0"><b>{{y.ctName}}: </b></div>
+                        <div style="font-size: 12px">{{y.ctText}}</div>
+                    </div>
+                </div>
             </div>
+
+            <!--分页-->
             <div style="text-align: center">
                 <ul class="pagination pagination-lg">
                     <li ng-click="firstPage()"><a href="#">&laquo;</a></li>
-                    <li ng-repeat="y in dataPage" ng-class="y.class" ng-click="turnTo(y.page)"><a href="#">{{y.page}}</a></li>
+                    <li ng-repeat="z in dataPage" ng-class="z.class" ng-click="turnTo(z.page)"><a href="#">{{z.page}}</a></li>
                     <li ng-click="lastPage()"><a href="#">&raquo;</a></li>
                 </ul>
             </div>

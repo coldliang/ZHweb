@@ -120,6 +120,37 @@ article {
     text-decoration: underline;
 }
 
+.wellBottom {
+    margin: 10px 5px 0;
+    padding: 10px 0 0;
+    border-top: 1px solid #eee;
+    color: #ccc;
+    cursor: pointer;
+}
+
+.wellBottom div:nth-child(2) {
+    border-right: 1px solid #bbb;
+    border-left: 1px solid #bbb;
+}
+
+.wellBottom div:hover {
+    color: #3A80C0;
+}
+
+.wellBottom span {
+    font-size: 14px;
+    font-weight: 200;
+}
+
+.comment form {
+    margin-top: 10px;
+}
+
+.commentText {
+    margin-top: 10px;
+    padding: 0 5px;
+}
+
 /*内容栏结束*/
 
 /*用户栏未登录CSS*/

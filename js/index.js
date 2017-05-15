@@ -29,18 +29,22 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
         $scope.user = {};
         localStorage.myNtId = 0;
         $scope.dataPage = {};
+        $scope.commentSubmitText = {};
 
         $scope.needCheck();
+
+        //初始化脑书展示
         $http.get("php/initIndex.php")
             .success(function(response){
                 $scope.wellData = {};
                 $scope.showData = {};
                 $scope.wellData = response;
-                //获取数据长度
+                //获取数据长度并计算页数
                 for(j in $scope.wellData){
                     dataLength++;
                     if(j%5 === 0)    page++;
                 }
+                //将页数存入$scope.dataPage中
                 for(var k=1; k <= page; k++){
                      jsPage[k] = new Array();
                      jsPage[k].page = k;
@@ -50,6 +54,84 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
                  $scope.dataPage[1].class = "active";
                 for(; i<=5 && $scope.wellData[i]; i++){
                     $scope.showData[i] = $scope.wellData[i];
+                    $scope.showData[i].commentShow = 0;
+                }
+            })
+            .error(function(response){
+                alert("连接服务器失败");
+            });
+    };
+
+    //提交评论
+    $scope.commentSubmit =  function (ntId,index) {
+        $scope.commentText = {};
+        $scope.commentText.ntId = ntId;
+        $scope.commentText.text = $scope.commentSubmitText.text;
+        $http({
+            method: 'post',
+            url: 'php/commentSubmit.php',
+            data: $scope.commentText,
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        })
+            .success(function(response){
+                $scope.commentSubmitText.text = "";
+
+                //更新评论区
+                $http({
+                    method: 'post',
+                    url: 'php/comment.php',
+                    data: ntId,
+                    headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+                })
+                    .success(function(response){
+                        //初始化评论区
+                        var text = new Array();
+                        text[1] = new Array();
+                        $scope.commentData = {};
+                        text[1].ctText = "暂时还没有评论，抢个沙发吧！";
+                        text[1].ctTime = "";
+                        text[1].ctName = "";
+                        $scope.commentData[1] = text[1];
+
+                        if(response != 0) {
+                            $scope.commentData = response;
+                        }
+                    })
+                    .error(function(response){
+                        alert("连接服务器失败");
+                    });
+
+                //更新评论数量
+                $scope.showData[index+1].ctNum++;
+            })
+            .error(function(response){
+                alert("连接服务器失败");
+            });
+    };
+
+    //打开评论
+    $scope.openComment = function (index,ntId) {
+        for(var p = 1; p <= 5; p++)
+            $scope.showData[p].commentShow = 0;
+        $scope.showData[index+1].commentShow = 1;
+        $http({
+            method: 'post',
+            url: 'php/comment.php',
+            data: ntId,
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        })
+            .success(function(response){
+                //初始化评论区
+                var text = new Array();
+                text[1] = new Array();
+                $scope.commentData = {};
+                text[1].ctText = "暂时还没有评论，抢个沙发吧！";
+                text[1].ctTime = "";
+                text[1].ctName = "";
+                $scope.commentData[1] = text[1];
+
+                if(response != 0) {
+                    $scope.commentData = response;
                 }
             })
             .error(function(response){
