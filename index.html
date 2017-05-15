@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>智慧脑书</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/reset.css">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <style>
+
+    </style>
+</head>
+<body ng-app="xiongmaoApp" ng-controller="xiongmaoCtrl" ng-init="myOnInit()">
+
+<!--头部-->
+<header>
+    <div class="hd-line"></div>
+    <div class="hd-container">
+        <img src="img/logo.png">
+        <nav>
+            <a href="naoshu.php">我的脑书</a>
+            <a href="#">发现</a>
+        </nav>
+    </div>
+</header>
+<!--头部结束-->
+
+<div id="body-container" class="body-container">
+    <div class="art-container">
+        <!--左边导航栏-->
+        <div class="nav-left">
+            <a href="#">测试语句</a>
+            <a href="#">测试语句</a>
+            <a href="#">测试语句</a>
+            <a href="#">测试语句</a>
+            <a href="#">测试语句</a>
+            <a href="#">测试语句</a>
+            <a href="#">测试语句</a>
+        </div>
+
+        <!--中间内容-->
+        <article>
+            <div class="myWell"  ng-repeat="x in showData" ng-cloak>
+                <div class="row">
+                    <div class="col-sm-2">
+                        <img src="img/default.jpg" class="img-circle">
+                    </div>
+                    <div class="col-sm-9">
+                        <a ng-click="jumpTo(x.ntId)"><h5><b>{{x.name}}/{{x.ntName}}/{{x.ntId}}</b></h5></a>
+                        {{x.abstract}}
+                    </div>
+                    <span class="glyphicon glyphicon-star pull-right"></span>
+                </div>
+            </div>
+            <div style="text-align: center">
+                <ul class="pagination pagination-lg">
+                    <li ng-click="firstPage()"><a href="#">&laquo;</a></li>
+                    <li ng-repeat="y in dataPage" ng-class="y.class" ng-click="turnTo(y.page)"><a href="#">{{y.page}}</a></li>
+                    <li ng-click="lastPage()"><a href="#">&raquo;</a></li>
+                </ul>
+            </div>
+        </article>
+
+        <!--用户栏-->
+        <aside ng-cloak>
+            <form ng-hide="isLogined" ng-submit="loginForm()" class="unlogined" role="form" novalidate>
+                <h4>欢迎使用智慧脑图</h4>
+                <div class="form-group">
+                    <input type="text" class="form-control" ng-model="loginData.user" placeholder="请输入账号" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" ng-model="loginData.password" placeholder="请输入密码" required>
+                    <div ng-show="alertShow" class="myAlert">
+                        <span ng-click="alertShow = 0" class="myClose pull-right">X</span>
+                        <span ng-show="serverFail">请求服务器失败，请重试</span>
+                        <span ng-show="loginFail">用户名或密码错误</span>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-default pull-left">登录</button>
+
+                <a class="btn btn-default pull-right" data-toggle="modal" data-target="#myModal">注册</a>
+            </form>
+            <!-- 模态框（Modal） -->
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <form class="modal-content" role="form" ng-submit="registerForm()" novalidate>
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                &times;
+                            </button>
+                            <h4 class="modal-title" id="myModalLabel">
+                                脑图注册
+                            </h4>
+                        </div>
+                        <div class="modal-body">
+                            <input type="text" class="form-control form-group" ng-model="registerData.user" placeholder="账号(1-6位数字)" required>
+                            <input type="text" class="form-control form-group" ng-model="registerData.name" placeholder="昵称（长度不大于20）" required>
+                            <input type="password" class="form-control form-group" ng-model="registerData.password" placeholder="密码（长度不大于6的数字）" required>
+                            <div class="form-group">
+                                <input type="password" class="form-control" ng-model="registerData.passwordAgain" placeholder="确认密码" required>
+                                <div ng-show="registerAlertShow" class="myAlert">
+                                    <span ng-click="registerAlertShow = 0" class="myClose pull-right">X</span>
+                                    <span ng-show="registerServerFail">请求服务器失败，请重试</span>
+                                    <span ng-show="registerFail">注册失败，{{registerError}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                立即注册
+                            </button>
+                        </div>
+                    </form><!-- /.modal-content -->
+                </div>
+            </div><!-- /.modal -->
+
+            <div ng-show="isLogined" class="logined">
+                <img class="img-circle" ng-src="{{user.imgPath}}"><br>
+                <h5 class="text-center"><strong>{{user.name}}</strong></h5>
+                <div class="userInf container">
+                    <div class="col-sm-4 text-center">
+                        <strong>998</strong>
+                        <br>关注
+                    </div>
+                    <div class="col-sm-4 text-center">
+                        <strong>998</strong>
+                        <br>粉丝
+                    </div>
+                    <div class="col-sm-4 text-center">
+                        <strong>998</strong>
+                        <br>脑书
+                    </div>
+                </div>
+            </div>
+        </aside>
+        <!--用户栏结束-->
+
+    </div>
+</div>
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/angular.min.js"></script>
+<!--<script src="js/less.min.js"></script>-->
+<script src="js/index.js"></script>
+</body>
+</html>

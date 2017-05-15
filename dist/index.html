@@ -1,0 +1,175 @@
+﻿<!--editor.minder.exportJson() - 导出脑图数据为 JSON 对象-->
+<!--editor.minder.importJson(json) - 导入 JSON 对象为当前脑图数据-->
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>KityMinder Editor - Powered By FEX</title>
+
+	<link href="favicon.ico" type="image/x-icon" rel="shortcut icon">
+
+	<!-- bower:css -->
+	<link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css" />
+	<link rel="stylesheet" href="../bower_components/codemirror/lib/codemirror.css" />
+	<link rel="stylesheet" href="../bower_components/hotbox/hotbox.css" />
+	<link rel="stylesheet" href="../bower_components/kityminder-core/dist/kityminder.core.css" />
+	<link rel="stylesheet" href="../bower_components/color-picker/dist/color-picker.min.css" />
+	<!-- endbower -->
+
+	<link rel="stylesheet" href="kityminder.editor.min.css">
+
+	<style>
+		html, body {
+			margin: 0;
+			padding: 0;
+			height: 100%;
+			overflow: hidden;
+		}
+		h1.editor-title {
+			background: #393F4F;
+			color: white;
+			margin: 0;
+			height: 40px;
+			font-size: 14px;
+			line-height: 40px;
+			font-family: 'Hiragino Sans GB', 'Arial', 'Microsoft Yahei';
+			font-weight: normal;
+			padding: 0 20px;
+		}
+		div.minder-editor-container {
+			position: absolute;
+			top: 40px;
+			bottom: 0;
+			left: 0;
+			right: 0;
+		}
+	</style>
+</head>
+<body ng-app="kityminderDemo" ng-controller="MainController">
+<h1 class="editor-title">KityMinder Editor - Powered By FEX
+	<button class="btn btn-default" ng-click="saveForJson()">保存</button>
+	<a class="btn btn-default" href="../naoshu.php">返回</a>
+</h1>
+<kityminder-editor on-init="initEditor(editor, minder)"></kityminder-editor>
+</body>
+
+<!-- bower:js -->
+<script src="../bower_components/jquery/dist/jquery.js"></script>
+<script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+<script src="../bower_components/angular/angular.js"></script>
+<script src="../bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script src="../bower_components/codemirror/lib/codemirror.js"></script>
+<script src="../bower_components/codemirror/mode/xml/xml.js"></script>
+<script src="../bower_components/codemirror/mode/javascript/javascript.js"></script>
+<script src="../bower_components/codemirror/mode/css/css.js"></script>
+<script src="../bower_components/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+<script src="../bower_components/codemirror/mode/markdown/markdown.js"></script>
+<script src="../bower_components/codemirror/addon/mode/overlay.js"></script>
+<script src="../bower_components/codemirror/mode/gfm/gfm.js"></script>
+<script src="../bower_components/angular-ui-codemirror/ui-codemirror.js"></script>
+<script src="../bower_components/marked/lib/marked.js"></script>
+<script src="../bower_components/kity/dist/kity.min.js"></script>
+<script src="../bower_components/hotbox/hotbox.js"></script>
+<script src="../bower_components/json-diff/json-diff.js"></script>
+<script src="../bower_components/kityminder-core/dist/kityminder.core.min.js"></script>
+<script src="../bower_components/color-picker/dist/color-picker.min.js"></script>
+<!-- endbower -->
+
+<script src="kityminder.editor.min.js"></script>
+
+
+<script>
+	angular.module('kityminderDemo', ['kityminderEditor'])
+			.config(function (configProvider) {
+				configProvider.set('imageUpload', '../server/imageUpload.php');
+			})
+			.controller('MainController', function($scope,$http) {
+				$scope.initEditor = function(editor, minder) {
+					window.editor = editor;
+					window.minder = minder;
+				};
+
+                //kityMinder初始化
+                $http({
+                    method: 'post',
+                    url: '../php/kityCheck.php',
+                    data: localStorage.myNtId,
+                    headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+                })
+                    .success(function(response){
+                        if(response !== 0){
+                            editor.minder.importJson(response);
+                        }
+                    })
+                    .error(function(response){
+                        alert("连接服务器失败");
+                    });
+
+                $scope.saveForJson = function() {
+                    if(localStorage.myNtId == 0){
+                        $scope.newJson = {};
+                        $scope.newJson.ntName = prompt("请输入脑书名称","");
+                        if($scope.newJson.ntName !== null) {
+                            if($scope.newJson.ntName !== "" && $scope.newJson.ntName.length <= 20) {
+                                $scope.newJson.abstract = prompt("请写摘要","这家伙很懒，没写摘要");
+                                if($scope.newJson.abstract !== null){
+                                    $scope.newJson.jsonMsg = editor.minder.exportJson();
+                                    $scope.newJson.userId = localStorage.myUserId;
+                                    $http({
+                                        method: 'post',
+                                        url: '../php/save.php',
+                                        data: $scope.newJson,
+                                        headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+                                    })
+                                        .success(function(response){
+                                            if(response.length < 7){
+                                                localStorage.myNtId = response;
+                                                alert("保存成功");
+                                            }
+                                            else alert(response);
+                                        })
+                                        .error(function(response){
+                                            alert("连接服务器失败");
+                                        });
+                                }
+                            }
+                            else alert("脑书名称非法");
+                        }
+                    }
+                    else {
+                        $scope.updateData = {};
+                        $scope.updateData.ntId = localStorage.myNtId;
+                        $scope.updateData.jsonMsg = editor.minder.exportJson();
+                        $http({
+                            method: 'post',
+                            url: '../php/updateNt.php',
+                            data: $scope.updateData,
+                            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+                        })
+                            .success(function(response){
+                                if(response.length < 2)
+                                    alert("修改成功");
+                                else alert(response);
+                            })
+                            .error(function(response){
+                                alert("连接服务器失败");
+                            });
+                    }
+//                    $http({
+//                        method:'post',
+//
+//                        url:'post.php',
+//
+//                        data:editor.minder.exportJson()
+//
+//                    })
+//                        .success(function (response) {
+//                            console.log(response);
+//                        });
+                };
+
+			});
+
+</script>
+
+</html>

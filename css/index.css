@@ -1,0 +1,183 @@
+/*查看自定义CSS请搜索“my”*/
+.body-container {
+    width: 100%;
+    /*background-image: url(../img/backPic.jpg);*/
+    /*background-attachment: fixed;*/
+}
+
+body {
+    background-image: url(../img/backPic.jpg);
+    background-attachment: fixed;
+}
+
+.art-container {
+    width: 1000px;
+    margin: 0 auto;
+    padding-top: 10px;
+}
+
+/*头部CSS*/
+header {
+    background-color: white;
+}
+
+.hd-line {
+    height: 2px;
+    width: 100%;
+    background-color: #3A80C0;
+}
+
+.hd-container {
+    width: 1000px;
+    height: 50px;
+    margin: 0 auto;
+    padding: 10px 0;
+    box-sizing: border-box;
+}
+
+.hd-container img {
+    float: left;
+    height: 30px;
+}
+
+.hd-container nav {
+    float: right;
+    height: 30px;
+    font-size: 14px;
+}
+
+.hd-container nav a {
+    padding: 8px 8px 0 8px;
+    line-height: 30px;
+}
+
+.hd-container nav a:hover {
+    color: #3A80C0;
+}
+/*头部CSS结束*/
+
+/*导航栏CSS*/
+.nav-left {
+    width: 150px;
+    float: left;
+}
+
+.nav-left a {
+    float: left;
+    width: 100%;
+    padding: 10px 10px;
+    display: block;
+    /*background-color: #ccc;*/
+    box-sizing: border-box;
+    font-size: 14px;
+    opacity: 0.6;
+}
+
+.nav-left  a:hover {
+    background-color: #ddd;
+}
+/*导航栏CSS结束*/
+
+/*内容栏*/
+article {
+    float: left;
+    width: 600px;
+}
+
+.myPage {
+    margin: 20px auto;
+}
+
+.myWell {
+    padding: 20px 10px 20px;
+    margin-bottom: 10px;
+    background-color: white;
+    box-sizing: border-box;
+    border-radius: 2px;
+}
+
+.myWell img {
+    width: 50px;
+    height: 50px;
+    float: right;
+}
+
+.myWell h5 {
+    margin-top: 0;
+}
+
+.myWell span {
+    margin-right: 20px;
+    font-size: 16px;
+}
+
+.myWell a {
+    color: #3A80C0;
+    cursor: pointer;
+}
+
+.myWell a:hover {
+    text-decoration: underline;
+}
+
+/*内容栏结束*/
+
+/*用户栏未登录CSS*/
+aside {
+    float: left;
+    width: 230px;
+    margin-left: 10px;
+}
+
+.unlogined {
+    padding: 10px 10px 50px 10px;
+}
+
+.unlogined {
+    background-color: white;
+}
+
+.unlogined input {
+    width: 100%;
+}
+
+.myAlert {
+    width: 100%;
+    margin-top: 5px;
+    padding: 5px 5px;
+    background-color: #F2DEDF;
+    border-radius: 3px;
+}
+
+.myClose {
+    cursor: pointer;
+}
+
+.myClose:hover {
+    opacity: 0.6;
+}
+/*用户栏CSS结束*/
+
+/*已登录的界面*/
+.logined {
+    height: 165px;
+    background-image: url("../img/backPicMin.jpg");
+    background-size: 230px 75px;
+    background-repeat: no-repeat;
+    background-color: white;
+}
+
+.logined img {
+    margin-left: 83px;
+    margin-top: 30px;
+    width: 60px;
+    height: 60px;
+    padding: 2px;
+    background-color: #BED4E2;
+    clear: both;
+}
+
+.userInf {
+    width: 200px;
+    margin: 0 auto;
+}
