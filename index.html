@@ -45,12 +45,14 @@
                     <div class="col-sm-2">
                         <img src="img/default.jpg" class="img-circle img-left">
                     </div>
-                    <div class="col-sm-9">
+                    <div class="col-sm-6">
                         <a ng-click="jumpTo(x.ntId)"><h5><b>{{x.name}}/{{x.ntName}}/{{x.ntId}}</b></h5></a>
                         {{x.abstract}}
                     </div>
-                    <span class="glyphicon glyphicon-star pull-right"></span>
-                    <img ng-src="{{x.png}}+'?'+{{x.ntId}}" class="pull-right img-right">
+                    <div class="col-sm-4">
+                        <span class="glyphicon glyphicon-star pull-right"></span>
+                        <img ng-src="{{x.png}}+'?'+{{x.ntId}}" class="pull-right img-right">
+                    </div>
                 </div>
                 <div class="wellBottom row text-center">
                     <div class="col-sm-4"><span class="glyphicon glyphicon-heart-empty"></span></div>

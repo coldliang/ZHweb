@@ -101,7 +101,8 @@ article {
 
 .img-right {
     width: 160px;
-    height: 100px;
+    height: 105px;
+    padding-top: 5px;
     margin-right: 20px;
 }
 
