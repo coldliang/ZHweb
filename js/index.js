@@ -64,6 +64,24 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
             });
     };
 
+    //退出登录
+    $scope.exitUser = function () {
+        $http({
+            method: 'post',
+            url: 'php/exitUser.php',
+            data: $scope.commentText,
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        })
+            .success(function (response) {
+                localStorage.removeItem("myUserId");
+                $scope.loginData = {};
+                $scope.needCheck();
+            })
+            .error(function (response) {
+                alert("连接服务器失败")
+            })
+    };
+
     //提交评论
     $scope.commentSubmit =  function (ntId,index) {
         $scope.commentText = {};
@@ -151,9 +169,10 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
             headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
         })
             .success(function(response){
-                if(response == 1){//账号登录正确
+                if(response){//账号登录正确
                     $scope.needCheck();
                     $scope.isLogined = 1;
+                    localStorage.myUserId = response;
                 }
                 else if(response == 0){
                     $scope.alertShow = 1;
