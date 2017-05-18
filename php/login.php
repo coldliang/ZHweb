@@ -28,7 +28,7 @@
 			}
 		}
 		
-		echo $find;
+		echo $_COOKIE["userId"];
 		$mysqli->close();
 	}
 	
