@@ -1,5 +1,7 @@
 ﻿<!--editor.minder.exportJson() - 导出脑图数据为 JSON 对象-->
 <!--editor.minder.importJson(json) - 导入 JSON 对象为当前脑图数据-->
+<!--editor.minder.exportData(protocol, option) - 导出脑图数据为指定的数据格式，返回一个 Promise，其值为导出的结果-->
+<!--png - PNG 位图格式，仅支持导出-->
 <!DOCTYPE html>
 <html>
 <head>
@@ -48,6 +50,7 @@
 <body ng-app="kityminderDemo" ng-controller="MainController">
 <h1 class="editor-title">KityMinder Editor - Powered By FEX
 	<button class="btn btn-default" ng-click="saveForJson()">保存</button>
+	<button ng-click="myTest()">测试按钮</button>
 	<a class="btn btn-default" href="../naoshu.php">返回</a>
 </h1>
 <kityminder-editor on-init="initEditor(editor, minder)"></kityminder-editor>
@@ -105,7 +108,9 @@
                         alert("连接服务器失败");
                     });
 
+                //保存脑书文件
                 $scope.saveForJson = function() {
+                    //新建文件
                     if(localStorage.myNtId == 0){
                         $scope.newJson = {};
                         $scope.newJson.ntName = prompt("请输入脑书名称","");
@@ -113,47 +118,60 @@
                             if($scope.newJson.ntName !== "" && $scope.newJson.ntName.length <= 20) {
                                 $scope.newJson.abstract = prompt("请写摘要","这家伙很懒，没写摘要");
                                 if($scope.newJson.abstract !== null){
+                                    //导入JSON数据
                                     $scope.newJson.jsonMsg = editor.minder.exportJson();
+                                    //导入脑图ID
                                     $scope.newJson.userId = localStorage.myUserId;
-                                    $http({
-                                        method: 'post',
-                                        url: '../php/save.php',
-                                        data: $scope.newJson,
-                                        headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
-                                    })
-                                        .success(function(response){
-                                            if(response.length < 7){
-                                                localStorage.myNtId = response;
-                                                alert("保存成功");
-                                            }
-                                            else alert(response);
+                                    //导入png图片数据
+                                    editor.minder.exportData("png").then(function (content) {
+                                        $scope.newJson.png = content;
+                                        $http({
+                                            method: 'post',
+                                            url: '../php/save.php',
+                                            data: $scope.newJson,
+                                            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
                                         })
-                                        .error(function(response){
-                                            alert("连接服务器失败");
-                                        });
+                                            .success(function(response){
+                                                if(response.length < 7){
+                                                    localStorage.myNtId = response;
+                                                    alert("保存成功");
+                                                    console.log(response);
+                                                }
+                                                else alert(response);
+                                            })
+                                            .error(function(response){
+                                                alert("连接服务器失败");
+                                            });
+                                    });
                                 }
                             }
                             else alert("脑书名称非法");
                         }
                     }
+                    //修改文件
                     else {
                         $scope.updateData = {};
                         $scope.updateData.ntId = localStorage.myNtId;
                         $scope.updateData.jsonMsg = editor.minder.exportJson();
-                        $http({
-                            method: 'post',
-                            url: '../php/updateNt.php',
-                            data: $scope.updateData,
-                            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
-                        })
-                            .success(function(response){
-                                if(response.length < 2)
-                                    alert("修改成功");
-                                else alert(response);
+                        editor.minder.exportData("png").then(function (content) {
+                            $scope.updateData.png = content;
+                            $http({
+                                method: 'post',
+                                url: '../php/updateNt.php',
+                                data: $scope.updateData,
+                                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
                             })
-                            .error(function(response){
-                                alert("连接服务器失败");
-                            });
+                                .success(function(response){
+                                    if(response.length < 2){
+                                        alert("修改成功");
+                                        console.log(response);
+                                    }
+                                    else console.log(response);
+                                })
+                                .error(function(response){
+                                    alert("连接服务器失败");
+                                });
+                        });
                     }
 //                    $http({
 //                        method:'post',
@@ -166,6 +184,23 @@
 //                        .success(function (response) {
 //                            console.log(response);
 //                        });
+                };
+
+                $scope.myTest = function () {
+                    editor.minder.exportData("png").then(function (content) {
+                        $http({
+                            method: 'post',
+                            url: '../php/saveAsPng.php',
+                            data: content,
+                            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+                        })
+                            .success(function(response){
+
+                            })
+                            .error(function(response){
+                                alert("连接服务器失败");
+                            });
+                    });
                 };
 
 			});

@@ -1,8 +1,6 @@
 /*查看自定义CSS请搜索“my”*/
 .body-container {
     width: 100%;
-    /*background-image: url(../img/backPic.jpg);*/
-    /*background-attachment: fixed;*/
 }
 
 body {
@@ -67,7 +65,6 @@ header {
     width: 100%;
     padding: 10px 10px;
     display: block;
-    /*background-color: #ccc;*/
     box-sizing: border-box;
     font-size: 14px;
     opacity: 0.6;

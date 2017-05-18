@@ -13,6 +13,9 @@
 //    获取POST数据
     $postData = file_get_contents("php://input",true);
 
+//    将获得的png数据转化为可写入文件的字符,先将数据去除开头22个无用字符，再对base64编码进行解码
+    $pngData = base64_decode(substr($postData,22));
+
 //    连接数据库
     $mysqli = new mysqli('127.0.0.1', 'root', '','ZHnt');
     if($mysqli->connect_error) {
