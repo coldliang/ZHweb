@@ -17,7 +17,7 @@
         $mysqli->query("set names utf8");//插入数据库乱码解决办法
 
         $i = 1;
-        $sql = "SELECT a.ntId,a.ntName,a.ntPath,a.abstract,a.ctNum,b.name,b.imgPath 
+        $sql = "SELECT a.ntId,a.ntName,a.ntPath,a.abstract,a.ctNum,a.png,b.name,b.imgPath 
         FROM nt a JOIN user b 
         ON a.userId = b.userId ORDER BY a.ntId DESC";
         $result = $mysqli->query($sql);
@@ -31,6 +31,7 @@
                 $data[$i]["name"] = $row["name"];
                 $data[$i]["imgPath"] = $row["imgPath"];
                 $data[$i]["ctNum"] = $row["ctNum"];
+                $data[$i]["png"] = $row["png"];
                 $i++;
             }
         }

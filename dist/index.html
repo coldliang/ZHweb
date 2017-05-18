@@ -50,8 +50,27 @@
 <body ng-app="kityminderDemo" ng-controller="MainController">
 <h1 class="editor-title">KityMinder Editor - Powered By FEX
 	<button class="btn btn-default" ng-click="saveForJson()">保存</button>
-	<button ng-click="myTest()">测试按钮</button>
-	<a class="btn btn-default" href="../naoshu.php">返回</a>
+	<button ng-disabled="true" ng-click="myTest()">测试按钮</button>
+	<a ng-disabled="true" class="btn btn-default" href="../naoshu.html">返回</a>
+    <span class="pull-right dropdown">
+        <span class="dropdown-toggle" id="dropdownMenu1" style="cursor: pointer" data-toggle="dropdown">
+            <img class="img-circle" style="width: 30px;height: 30px" ng-src="{{user.imgPath}}">
+            {{user.name}}
+            <span class="caret"></span>
+        </span>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+            <li role="presentation">
+                <a role="menuitem" tabindex="-1" href="../index.html">我的主页</a>
+            </li>
+            <li role="presentation">
+                <a role="menuitem" tabindex="-1" href="../naoshu.html">我的脑书</a>
+            </li>
+            <li role="presentation" class="divider"></li>
+            <li role="presentation">
+                <a role="menuitem" tabindex="-1" href="#">注销</a>
+            </li>
+        </ul>
+    </span>
 </h1>
 <kityminder-editor on-init="initEditor(editor, minder)"></kityminder-editor>
 </body>
@@ -186,16 +205,41 @@
 //                        });
                 };
 
+                //检测cookie函数
+                $scope.needCheck = function(){
+                    $http.get("../php/check.php")
+                        .success(function(response){
+                            $scope.user = {};
+                            if(response === 0){
+                                console.log("未找到cookie信息");
+                            }
+                            else{
+                                $scope.user.imgPath = "../"+response.imgPath;
+                                $scope.user.name = response.name;
+                                localStorage.myUserId = response.userId;
+                                //在此添加登录后的后台代码
+                            }
+                        })
+                        .error(function(response){
+                            console.log("服务器请求失败");
+                        });
+                };
+
+                $scope.needCheck();
+
                 $scope.myTest = function () {
                     editor.minder.exportData("png").then(function (content) {
+                        $scope.data = {};
+                        $scope.data.png = content;
+                        $scope.data.ntId = localStorage.myNtId;
                         $http({
                             method: 'post',
                             url: '../php/saveAsPng.php',
-                            data: content,
+                            data: $scope.data,
                             headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
                         })
                             .success(function(response){
-
+                                alert(response);
                             })
                             .error(function(response){
                                 alert("连接服务器失败");

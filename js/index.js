@@ -42,8 +42,10 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
                 //获取数据长度并计算页数
                 for(j in $scope.wellData){
                     dataLength++;
+                    $scope.wellData[j].png = $scope.wellData[j].png + "?" +$scope.wellData[j].ntId;
                     if(j%5 === 0)    page++;
                 }
+                console.log($scope.wellData);
                 //将页数存入$scope.dataPage中
                 for(var k=1; k <= page; k++){
                      jsPage[k] = new Array();

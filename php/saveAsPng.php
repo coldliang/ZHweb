@@ -7,7 +7,8 @@
  */
     header("Content-type: text/html; charset=utf-8");
     error_reporting(0);
-    $postData = file_get_contents("php://input",true);
-    $pngData = base64_decode(substr($postData,22));
-    file_put_contents("../png/1.png", $pngData);
+    $postData = json_decode(file_get_contents("php://input",true),true);
+    $pngData = base64_decode(substr($postData["png"],22));
+    $pngPath = "../png/".$postData["ntId"].".png";
+    file_put_contents($pngPath, $pngData);
 ?>
