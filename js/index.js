@@ -34,25 +34,35 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
         $scope.needCheck();
 
         //初始化脑书展示
+        $scope.initIndex();
+    };
+
+    //初始化脑书展示函数
+    $scope.initIndex = function () {
         $http.get("php/initIndex.php")
             .success(function(response){
                 $scope.wellData = {};
                 $scope.showData = {};
                 $scope.wellData = response;
+                dataLength = 0;
+                j = 0;
+                page = 1;
                 //获取数据长度并计算页数
                 for(j in $scope.wellData){
                     dataLength++;
                     $scope.wellData[j].png = $scope.wellData[j].png + "?" +$scope.wellData[j].ntId;
                     if(j%5 === 0)    page++;
                 }
+                $scope.dataPage = {};
                 //将页数存入$scope.dataPage中
                 for(var k=1; k <= page; k++){
-                     jsPage[k] = new Array();
-                     jsPage[k].page = k;
-                     jsPage[k].class = "";
-                     $scope.dataPage[k] = jsPage[k];
+                    jsPage[k] = new Array();
+                    jsPage[k].page = k;
+                    jsPage[k].class = "";
+                    $scope.dataPage[k] = jsPage[k];
                 }
-                 $scope.dataPage[1].class = "active";
+                $scope.dataPage[1].class = "active";
+                i = 1;
                 for(; i<=5 && $scope.wellData[i]; i++){
                     $scope.showData[i] = $scope.wellData[i];
                     $scope.showData[i].commentShow = 0;
@@ -310,9 +320,56 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
                     alert("收藏成功")
                 }
                 else if(response == 0)
-                    alert("你已收藏过此脑书");
+                    alert("已取消收藏");
                 else
                     alert(response);
+            })
+            .error(function(response){
+                alert("连接服务器失败");
+            });
+    };
+
+    //显示收藏脑书
+    $scope.showStar = function () {
+        $http({
+            method: 'post',
+            url: 'php/showStar.php',
+            data: localStorage.myUserId,
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        })
+            .success(function(response){
+                if(response == 0) {
+                    alert("你还没有收藏任何脑书");
+                }
+                else {
+                    $scope.wellData = {};
+                    $scope.showData = {};
+                    $scope.wellData = response;
+                    dataLength = 0;
+                    j = 0;
+                    page = 1;
+                    //获取数据长度并计算页数
+                    for(j in $scope.wellData){
+                        dataLength++;
+                        $scope.wellData[j].png = $scope.wellData[j].png + "?" +$scope.wellData[j].ntId;
+                        if(j%5 === 0)    page++;
+                    }
+                    $scope.dataPage = {};
+                    //将页数存入$scope.dataPage中
+                    for(var k=1; k <= page; k++){
+                        jsPage[k] = new Array();
+                        jsPage[k].page = k;
+                        jsPage[k].class = "";
+                        $scope.dataPage[k] = jsPage[k];
+                    }
+                    $scope.dataPage[1].class = "active";
+                    i = 1;
+                    for(; i<=5 && $scope.wellData[i]; i++){
+                        $scope.showData[i] = $scope.wellData[i];
+                        $scope.showData[i].commentShow = 0;
+                    }
+                }
+
             })
             .error(function(response){
                 alert("连接服务器失败");

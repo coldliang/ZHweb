@@ -20,12 +20,16 @@
         $sql = "SELECT * FROM star ORDER BY id";
         $id = 0;
         $find = 0;
+        $starId = 0;
         $result = $mysqli->query($sql);
         if ($result->num_rows > 0) {
             // 输出每行数据
             while($row = $result->fetch_assoc()) {
-                if($row["userId"] == $_COOKIE["userId"] && $row["ntId"] == $postData)
+                if($row["userId"] == $_COOKIE["userId"] && $row["ntId"] == $postData) {
                     $find = 1;
+                    $starId = $row["id"];
+                }
+
                 $id = $row["id"];
             }
         }
@@ -44,12 +48,17 @@
             $stmt->bind_param('i',$_COOKIE["userId"]);
             $stmt->execute();
 
-            $stmt->close();
             echo 1;
         }
-        else
-            echo 0;
+        else {
+            $stmt = $mysqli->prepare("DELETE FROM star WHERE id = ?");
+            $stmt->bind_param('i',$starId);
+            $stmt->execute();
 
+            echo 0;
+        }
+
+        $stmt->close();
         $mysqli->close();
     }
 
