@@ -16,14 +16,17 @@
     else {
         $mysqli->query("set names utf8");//插入数据库乱码解决办法
 
-        $sql = "SELECT ntId FROM nt";
-        $ntId = 1;
+        $sql = "SELECT ntId FROM nt ORDER BY ntId";
+        $ntId = 0;
         $result = $mysqli->query($sql);
         if ($result->num_rows > 0) {
             // 输出每行数据
             while($row = $result->fetch_assoc()) {
-                if($ntId < $row["ntId"])
-                    $ntId = $row["ntId"];
+                $ntId++;
+                if($ntId != $row["ntId"]) {
+                    $ntId--;
+                    break;
+                }
             }
         }
         $ntId++;

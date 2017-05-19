@@ -20,8 +20,9 @@
 		}
 		else {
 			$mysqli->query("set names utf8");//插入数据库乱码解决办法
-			
-			$result = $mysqli->query("SELECT * FROM USER");
+
+            $userId = 0;
+			$result = $mysqli->query("SELECT * FROM USER ORDER BY userId");
 			if ($result->num_rows > 0) {
 				// 输出每行数据
 				while($row = $result->fetch_assoc()) {

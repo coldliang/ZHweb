@@ -130,32 +130,37 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
 
     //打开评论
     $scope.openComment = function (index,ntId) {
-        for(var p = 1; p <= 5; p++)
-            $scope.showData[p].commentShow = 0;
-        $scope.showData[index+1].commentShow = 1;
-        $http({
-            method: 'post',
-            url: 'php/comment.php',
-            data: ntId,
-            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
-        })
-            .success(function(response){
-                //初始化评论区
-                var text = new Array();
-                text[1] = new Array();
-                $scope.commentData = {};
-                text[1].ctText = "暂时还没有评论，抢个沙发吧！";
-                text[1].ctTime = "";
-                text[1].ctName = "";
-                $scope.commentData[1] = text[1];
-
-                if(response != 0) {
-                    $scope.commentData = response;
-                }
+        if($scope.showData[index+1].commentShow == 1){
+            $scope.showData[index+1].commentShow = 0;
+        }
+        else {
+            for(var p = 1; p <= 5; p++)
+                $scope.showData[p].commentShow = 0;
+            $scope.showData[index+1].commentShow = 1;
+            $http({
+                method: 'post',
+                url: 'php/comment.php',
+                data: ntId,
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
             })
-            .error(function(response){
-                alert("连接服务器失败");
-            });
+                .success(function(response){
+                    //初始化评论区
+                    var text = new Array();
+                    text[1] = new Array();
+                    $scope.commentData = {};
+                    text[1].ctText = "暂时还没有评论，抢个沙发吧！";
+                    text[1].ctTime = "";
+                    text[1].ctName = "";
+                    $scope.commentData[1] = text[1];
+
+                    if(response != 0) {
+                        $scope.commentData = response;
+                    }
+                })
+                .error(function(response){
+                    alert("连接服务器失败");
+                });
+        }
     };
 
     //登录
@@ -278,8 +283,36 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
             .success(function(response){
                 if(response == 1){
                     $scope.showData[index+1].thumbsUp++;
+                    $scope.showData[index+1].thumbsUpClass = "thumbsUp";
                 }
-                console.log(response);
+                else if(response == 0) {
+                    $scope.showData[index+1].thumbsUp--;
+                    $scope.showData[index+1].thumbsUpClass = "";
+                }
+                else
+                    alert(response);
+            })
+            .error(function(response){
+                alert("连接服务器失败");
+            });
+    };
+
+    //收藏函数
+    $scope.star = function (ntId) {
+        $http({
+            method: 'post',
+            url: 'php/star.php',
+            data: ntId,
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        })
+            .success(function(response){
+                if(response == 1){
+                    alert("收藏成功")
+                }
+                else if(response == 0)
+                    alert("你已收藏过此脑书");
+                else
+                    alert(response);
             })
             .error(function(response){
                 alert("连接服务器失败");

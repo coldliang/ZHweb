@@ -32,13 +32,17 @@
             $stmt->execute();
 
 //            更新thumbsUp表
-            $sql = "SELECT * FROM thumbsUp";
+            $sql = "SELECT * FROM thumbsUp ORDER BY id";
             $num = 0;
             $result = $mysqli->query($sql);
             if ($result->num_rows > 0) {
                 // 输出每行数据
                 while($row = $result->fetch_assoc()) {
                     $num++;
+                    if($num != $row["id"]) {
+                        $num--;
+                        break;
+                    }
                 }
             }
             $num++;
@@ -48,8 +52,20 @@
 
             echo 1;
         }
-        else
+        else {
+            //            更新nt表
+            $stmt = $mysqli->prepare("UPDATE nt SET thumbsUp = thumbsUp - 1 WHERE ntId = ?");
+            $stmt->bind_param('i',$postData);
+            $stmt->execute();
+
+//            更新thumbsUp表
+            $stmt = $mysqli->prepare("DELETE FROM thumbsup WHERE ntId = ? AND userId = ?");
+            $stmt->bind_param('ii',$postData,$_COOKIE["userId"]);
+            $stmt->execute();
+
             echo 0;
+        }
+
 
         $stmt->close();
         $mysqli->close();

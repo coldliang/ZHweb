@@ -20,7 +20,7 @@
         <nav>
             <a href="naoshu.html">我的脑书</a>
             <a href="#">发现</a>
-            <a href="#" ng-click="exitUser()">退出</a>
+            <a href="#" ng-click="exitUser()">退出登录</a>
         </nav>
     </div>
 </header>
@@ -30,7 +30,7 @@
     <div class="art-container">
         <!--左边导航栏-->
         <div class="nav-left">
-            <a href="#">测试语句</a>
+            <a href="#">我的收藏</a>
             <a href="#">测试语句</a>
             <a href="#">测试语句</a>
             <a href="#">测试语句</a>
@@ -56,9 +56,9 @@
                     </div>
                 </div>
                 <div class="wellBottom row text-center">
-                    <div class="col-sm-4"><span class="glyphicon glyphicon-heart-empty"></span></div>
+                    <div class="col-sm-4" ng-click="star(x.ntId)"><span class="glyphicon glyphicon-heart-empty"></span></div>
                     <div class="col-sm-4" ng-click="openComment($index,x.ntId)"><span class="glyphicon glyphicon-edit"></span>{{x.ctNum}}</div>
-                    <div class="col-sm-4" ng-click="thumbsUp($index,x.ntId)"><span class="glyphicon glyphicon-thumbs-up"></span>{{x.thumbsUp}}</div>
+                    <div class="col-sm-4" ng-click="thumbsUp($index,x.ntId)"><span class="glyphicon glyphicon-thumbs-up" ng-class="x.thumbsUpClass"></span>{{x.thumbsUp}}</div>
                 </div>
                 <div class="comment" ng-show="x.commentShow">
 

@@ -38,16 +38,20 @@
     }
 
 //    遍历表
-    $sql = "SELECT * FROM comment";
-    $num = 0;
+    $sql = "SELECT * FROM comment ORDER BY id";
+    $id = 0;
     $result = $mysqli->query($sql);
     if ($result->num_rows > 0) {
         // 输出每行数据
         while($row = $result->fetch_assoc()) {
-            $num++;
+            $id++;
+            if($id != $row["id"]) {
+                $id--;
+                break;
+            }
         }
     }
-    $num++;
+    $id++;
 
 //   普通预处理
     $stmt = $mysqli->prepare("SELECT * FROM comment WHERE ntId = ?");

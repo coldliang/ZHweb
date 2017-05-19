@@ -21,13 +21,17 @@
         $stmt->bind_param('i',$postData["ntId"]);
         $stmt->execute();
 
-        $sql = "SELECT * FROM comment";
+        $sql = "SELECT * FROM comment ORDER BY ctId";
         $num = 0;
         $result = $mysqli->query($sql);
         if ($result->num_rows > 0) {
             // 输出每行数据
             while($row = $result->fetch_assoc()) {
                 $num++;
+                if($num != $row["ctId"]) {
+                    $num--;
+                    break;
+                }
             }
         }
         $num++;
