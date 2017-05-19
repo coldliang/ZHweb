@@ -146,6 +146,72 @@ article {
     font-weight: 200;
 }
 
+/*点赞动画失败注释*/
+/*.thumbsUp {*/
+    /*animation: thumbsUp 3s;*/
+    /*-webkit-animation: thumbsUp 3s;*/
+/*}*/
+
+/*@keyframes thumbsUp*/
+/*{*/
+    /*0% {*/
+        /*color: black;*/
+    /*}*/
+    /*25% {*/
+        /*color: #F9FB6C;*/
+        /*transform: rotate(-30deg);*/
+        /*-ms-transform: rotate(-30deg); !* IE 9 *!*/
+        /*-webkit-transform: rotate(-30deg); !* Safari and Chrome *!*/
+    /*}*/
+    /*50% {*/
+        /*transform: rotate(0);*/
+        /*-ms-transform: rotate(0); !* IE 9 *!*/
+        /*-webkit-transform: rotate(0); !* Safari and Chrome *!*/
+    /*}*/
+    /*75% {*/
+        /*color: #F9FB6C;*/
+        /*transform: rotate(30deg);*/
+        /*-ms-transform: rotate(30deg); !* IE 9 *!*/
+        /*-webkit-transform: rotate(30deg); !* Safari and Chrome *!*/
+    /*}*/
+    /*100% {*/
+        /*color: black;*/
+        /*transform: rotate(0);*/
+        /*-ms-transform: rotate(0); !* IE 9 *!*/
+        /*-webkit-transform: rotate(0); !* Safari and Chrome *!*/
+    /*}*/
+/*}*/
+
+/*@-webkit-keyframes thumbsUp !* Safari and Chrome *!*/
+/*{*/
+    /*0% {*/
+        /*color: black;*/
+    /*}*/
+    /*25% {*/
+        /*color: #F9FB6C;*/
+        /*transform: rotate(-30deg);*/
+        /*-ms-transform: rotate(-30deg); !* IE 9 *!*/
+        /*-webkit-transform: rotate(-30deg); !* Safari and Chrome *!*/
+    /*}*/
+    /*50% {*/
+        /*transform: rotate(0);*/
+        /*-ms-transform: rotate(0); !* IE 9 *!*/
+        /*-webkit-transform: rotate(0); !* Safari and Chrome *!*/
+    /*}*/
+    /*75% {*/
+        /*color: #F9FB6C;*/
+        /*transform: rotate(30deg);*/
+        /*-ms-transform: rotate(30deg); !* IE 9 *!*/
+        /*-webkit-transform: rotate(30deg); !* Safari and Chrome *!*/
+    /*}*/
+    /*100% {*/
+        /*color: black;*/
+        /*transform: rotate(0);*/
+        /*-ms-transform: rotate(0); !* IE 9 *!*/
+        /*-webkit-transform: rotate(0); !* Safari and Chrome *!*/
+    /*}*/
+/*}*/
+
 .comment form {
     margin-top: 10px;
 }

@@ -28,7 +28,7 @@
         }
         $ntId++;
         $ntPath = "../json/".$ntId.".json";
-        $png = "png/".$ntId.".png";
+        $png = "../png/".$ntId.".png";
         $pngData = base64_decode(substr($postData["png"],22));
 
         $stmt = $mysqli->prepare("INSERT INTO nt (userId, ntId, ntName, ntPath, abstract,png) VALUES (?,?,?,?,?,?)");

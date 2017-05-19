@@ -45,7 +45,6 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
                     $scope.wellData[j].png = $scope.wellData[j].png + "?" +$scope.wellData[j].ntId;
                     if(j%5 === 0)    page++;
                 }
-                console.log($scope.wellData);
                 //将页数存入$scope.dataPage中
                 for(var k=1; k <= page; k++){
                      jsPage[k] = new Array();
@@ -265,6 +264,23 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
             })
             .error(function(response){
                 $scope.isLogined = 0;
+            });
+    };
+
+    //点赞函数
+    $scope.thumbsUp = function (index,ntId) {
+        $scope.showData[index+1].thumbsUp++;
+        $http({
+            method: 'post',
+            url: 'php/thumbsUp.php',
+            data: ntId,
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        })
+            .success(function(response){
+
+            })
+            .error(function(response){
+                alert("连接服务器失败");
             });
     };
 
