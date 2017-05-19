@@ -37,6 +37,18 @@
         }
     }
 
+//    遍历表
+    $sql = "SELECT * FROM comment";
+    $num = 0;
+    $result = $mysqli->query($sql);
+    if ($result->num_rows > 0) {
+        // 输出每行数据
+        while($row = $result->fetch_assoc()) {
+            $num++;
+        }
+    }
+    $num++;
+
 //   普通预处理
     $stmt = $mysqli->prepare("SELECT * FROM comment WHERE ntId = ?");
     $stmt->bind_param('i',$ntId);
@@ -54,7 +66,6 @@
     // 输出每行数据
     while($stmt->fetch()) {
         $row[$i]["ntName"] = $ntName;
-
     }
     echo json_encode($row);
     $stmt->free_result();

@@ -269,7 +269,6 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
 
     //点赞函数
     $scope.thumbsUp = function (index,ntId) {
-        $scope.showData[index+1].thumbsUp++;
         $http({
             method: 'post',
             url: 'php/thumbsUp.php',
@@ -277,7 +276,10 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
             headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
         })
             .success(function(response){
-
+                if(response == 1){
+                    $scope.showData[index+1].thumbsUp++;
+                }
+                console.log(response);
             })
             .error(function(response){
                 alert("连接服务器失败");
