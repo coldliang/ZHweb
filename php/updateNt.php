@@ -10,7 +10,7 @@
     $postData = json_decode(file_get_contents("php://input",true),true);
 
     $ntPath = "../json/".$postData["ntId"].".json";
-    $ntPng = "../png/".$postData["ntId"].".png";
+    $ntPng = "png/".$postData["ntId"].".png";
     $pngData = base64_decode(substr($postData["png"],22));
     file_put_contents($ntPath, json_encode($postData["jsonMsg"]));
     file_put_contents($ntPng,$pngData);
