@@ -185,7 +185,6 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
             .success(function(response){
                 if(response){//账号登录正确
                     $scope.needCheck();
-                    $scope.isLogined = 1;
                     localStorage.myUserId = response;
                 }
                 else if(response == 0){

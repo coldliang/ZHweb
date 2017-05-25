@@ -19,7 +19,7 @@
         <img src="img/logo.png">
         <nav>
             <a href="naoshu.html">我的脑书</a>
-            <a href="#">发现</a>
+            <a href="#">个人中心</a>
             <a href="#" ng-click="exitUser()">退出登录</a>
         </nav>
     </div>
@@ -32,18 +32,15 @@
         <div class="nav-left">
             <a ng-click="initIndex()"><strong>首页</strong></a>
             <a ng-click="showStar()"><strong>我的收藏</strong></a>
-            <a href="#">测试语句</a>
-            <a href="#">测试语句</a>
-            <a href="#">测试语句</a>
-            <a href="#">测试语句</a>
-            <a href="#">测试语句</a>
+            <a href="#"><strong>我的粉丝</strong></a>
+            <a href="#"><strong>我的关注</strong></a>
         </div>
 
         <!--中间内容-->
         <article>
-            <div>
-                搜索栏
-            </div>
+            <form role="form">
+                <input type="text" placeholder="搜索人名或者脑书名" class="form-control topInput">
+            </form>
             <div class="myWell"  ng-repeat="x in showData" ng-cloak>
                 <div class="row">
                     <div class="col-sm-2">

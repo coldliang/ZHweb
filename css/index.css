@@ -82,6 +82,10 @@ article {
     width: 600px;
 }
 
+.topInput {
+    margin-bottom: 10px;
+}
+
 .myPage {
     margin: 20px auto;
 }

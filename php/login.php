@@ -1,6 +1,6 @@
 <?php
 	header("Content-type: text/html; charset=utf-8"); 
-	error_reporting(0);
+//	error_reporting(0);
 	//将接收到的JSON文件转换为数组
 	$postData = json_decode(file_get_contents("php://input",true),true);
 	
@@ -24,11 +24,13 @@
 					setcookie("imgPath",$row["imgPath"],time()+3600*24*7);
 					setcookie("name",$row["name"],time()+3600*24*7);
 					setcookie("userId",$row["userId"],time()+3600*24*7);
+					$find = $row["userId"];
+					break;
 				}
 			}
 		}
 		
-		echo $_COOKIE["userId"];
+		echo $find;
 		$mysqli->close();
 	}
 	
