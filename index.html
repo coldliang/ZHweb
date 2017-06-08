@@ -18,9 +18,9 @@
     <div class="hd-container">
         <img src="img/logo.png">
         <nav>
-            <a href="naoshu.html">我的脑书</a>
-            <a href="#">个人中心</a>
-            <a href="#" ng-click="exitUser()">退出登录</a>
+            <a href="#" ng-click="toMyNaoshu()">我的脑书</a>
+            <a href="#" ng-click="toPersonal()">个人中心</a>
+            <a href="#" ng-click="exitUser()">退出</a>
         </nav>
     </div>
 </header>
@@ -32,8 +32,8 @@
         <div class="nav-left">
             <a ng-click="initIndex()"><strong>首页</strong></a>
             <a ng-click="showStar()"><strong>我的收藏</strong></a>
-            <a href="#"><strong>我的粉丝</strong></a>
-            <a href="#"><strong>我的关注</strong></a>
+            <a href="#" ng-click="toFollower()"><strong>我的粉丝</strong></a>
+            <a href="#" ng-click="toFollow()"><strong>我的关注</strong></a>
         </div>
 
         <!--中间内容-->

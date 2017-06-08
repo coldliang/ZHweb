@@ -26,7 +26,7 @@
         $mysqli->query("set names utf8");
         $mysqli->close();
     }
-
+//your_password
 //    普通查询
     $sql = "SELECT * FROM user";
     $result = $mysqli->query($sql);
@@ -75,4 +75,22 @@
     $stmt->free_result();
     $stmt->close();
     $mysqli->close();
+
+//    头部初始化
+header("Content-type: text/html; charset=utf-8");
+error_reporting(0);
+
+//    获取POST数据
+$postData = file_get_contents("php://input",true);
+//    连接数据库
+$mysqli = new mysqli('127.0.0.1', 'root', '','ZHnt');
+if($mysqli->connect_error) {
+    die("连接失败：".$mysqli->connect_error);
+}
+else {
+    //插入数据库乱码解决办法
+    $mysqli->query("set names utf8");
+
+    $mysqli->close();
+}
 ?>

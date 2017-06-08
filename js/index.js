@@ -140,6 +140,12 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
 
     //打开评论
     $scope.openComment = function (index,ntId) {
+        //检测是否已登录
+        if($scope.isLogined == 0) {
+            alert("请先登录！");
+            return;
+        }
+
         if($scope.showData[index+1].commentShow == 1){
             $scope.showData[index+1].commentShow = 0;
         }
@@ -230,8 +236,48 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
         }
     };
 
+    //脑书管理页面跳转
+    $scope.toMyNaoshu = function () {
+        if($scope.isLogined == 0) {
+            alert("请先登录！");
+            return;
+        }
+        window.location.href = "naoshu.html";
+    };
+
+    //跳转到个人中心
+    $scope.toPersonal = function () {
+        if($scope.isLogined == 0) {
+            alert("请先登录！");
+            return;
+        }
+        console.log("123");
+    };
+
+    //跳转到我的粉丝
+    $scope.toFollower = function () {
+        if($scope.isLogined == 0) {
+            alert("请先登录！");
+            return;
+        }
+        console.log("123");
+    };
+
+    //跳转到我的关注
+    $scope.toFollow = function () {
+        if($scope.isLogined == 0) {
+            alert("请先登录！");
+            return;
+        }
+        console.log("123");
+    };
+
     //脑书跳转
     $scope.jumpTo = function (ntId) {
+        if($scope.isLogined == 0) {
+            alert("请先登录！");
+            return;
+        }
         localStorage.myNtId = ntId;
         window.location.href = "dist/index.html";
     };
@@ -283,6 +329,12 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
 
     //点赞函数
     $scope.thumbsUp = function (index,ntId) {
+        //检测是否已登录
+        if($scope.isLogined == 0) {
+            alert("请先登录！");
+            return;
+        }
+
         $http({
             method: 'post',
             url: 'php/thumbsUp.php',
@@ -308,6 +360,10 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
 
     //收藏函数
     $scope.star = function (ntId) {
+        if($scope.isLogined == 0) {
+            alert("请先登录！");
+            return;
+        }
         $http({
             method: 'post',
             url: 'php/star.php',
@@ -330,6 +386,10 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
 
     //显示收藏脑书
     $scope.showStar = function () {
+        if($scope.isLogined == 0) {
+            alert("请先登录！");
+            return;
+        }
         $http({
             method: 'post',
             url: 'php/showStar.php',
