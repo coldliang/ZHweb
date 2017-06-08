@@ -3,7 +3,56 @@
 <head>
     <meta charset="utf-8">
 </head>
+<style>
+    body {
+        padding: 0;
+        margin: 0;
+    }
+
+    .back {
+        position: fixed;
+        width: 0;
+        height: 0;
+        top: 0;
+        left: 0;
+        z-index: 5;
+        background-color: rgba(0,0,0,0.8);
+        text-align: center;
+        display: -webkit-box;
+        -webkit-box-pack:center;
+        -webkit-box-align:center;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    #img {
+        width: 0;
+        height: 0;
+        transition: width 2s,height 2s;
+    }
+</style>
 <body>
-网站还没建好，过几天再来吧
+<button onclick="openModel()">打开</button>
+<div class="realBack">
+    <div id="back" class="back">
+        <img id="img" src="png/1.png">
+    </div>
+</div>
+
+
+<script>
+    var winH = window.innerHeight;
+    var winW = window.innerWidth;
+    var back = document.getElementById("back");
+    var img = document.getElementById("img");
+//    back.style.width = winW+'px';
+//    back.style.height = winH+'px';
+    var openModel = function () {
+        back.style.width = winW+'px';
+        back.style.height = winH+'px';
+        img.style.width = "auto";
+        img.style.height = "auto";
+    };
+</script>
 </body>
 </html>

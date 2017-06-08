@@ -20,7 +20,7 @@
         <nav>
             <a href="#" ng-click="toMyNaoshu()">我的脑书</a>
             <a href="#" ng-click="toPersonal()">个人中心</a>
-            <a href="#" ng-click="exitUser()">退出</a>
+            <a href="#" ng-click="exitUser()" ng-show="isLogined">退出</a>
         </nav>
     </div>
 </header>
@@ -52,7 +52,14 @@
                     </div>
                     <div class="col-sm-4">
                         <span class="glyphicon glyphicon-star pull-right"></span>
-                        <img ng-src="{{x.png}}+'?'+{{x.ntId}}" class="pull-right img-right">
+                        <a href="#" title="点击查看大图">
+                            <img ng-src="{{x.png}}+'?'+{{x.ntId}}" class="pull-right img-right" ng-click="openBigPng($index)">
+                        </a>
+
+                        <!--图片模态框-->
+                        <div class="modalBack" ng-class="x.modalBackClass" ng-click="closeBigPng($index)">
+                            <img id="img" ng-src="{{x.png}}+'?'+{{x.ntId}}">
+                        </div>
                     </div>
                 </div>
                 <div class="wellBottom row text-center">

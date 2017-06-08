@@ -179,6 +179,17 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
         }
     };
 
+    //打开大图函数
+    $scope.openBigPng = function (index) {
+        $scope.showData[index+1].modalBackClass = "allScreen";
+    };
+
+    //关闭大图函数
+    $scope.closeBigPng = function (index) {
+        $scope.showData[index+1].modalBackClass = "";
+        $scope.showData[index+1].modalPngClass = "";
+    };
+
     //登录
     $scope.loginForm = function(){
         $scope.close();
