@@ -37,6 +37,7 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
         $scope.userSearchShow = 0;
         $scope.searchUser = {};
 
+        $scope.personalMsg = {};
         $scope.needCheck();
 
         //初始化脑书展示
@@ -45,6 +46,9 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
 
     //初始化脑书展示函数
     $scope.initIndex = function () {
+        //关闭个人中心
+        $scope.personalShow = 0;
+
         $scope.initShow();
         $http.get("php/initIndex.php")
             .success(function(response){
@@ -54,6 +58,65 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
             .error(function(response){
                 alert("连接服务器失败");
             });
+    };
+
+    //个人中心-修改名称
+    $scope.changeName = function () {
+        if($scope.personalMsg.name){
+            $http({
+                method: 'post',
+                url: 'php/changeName.php',
+                data: $scope.personalMsg.name,
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+            })
+                .success(function (response) {
+                    if(response == 2)
+                        alert("名字太长");
+                    else if(response == 3)
+                        alert("名字重复");
+                    else if(response == 1){
+                        $scope.needCheck();
+                        alert("名字修改成功");
+                    }
+                })
+                .error(function (response) {
+                    alert("连接服务器失败")
+                })
+        }
+
+        //清空个人中心信息
+        $scope.personalMsg = {};
+    };
+
+    //个人中心-修改密码
+    $scope.changePassword = function () {
+        if($scope.personalMsg.password){
+            if($scope.personalMsg.password !== $scope.personalMsg.pwdAgain){
+                alert("两次输入的密码不一致");
+                return;
+            }
+            $http({
+                method: 'post',
+                url: 'php/changePwd.php',
+                data: $scope.personalMsg.password,
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+            })
+                .success(function (response) {
+                    if(response == 2)
+                        alert("密码不能超过6位数字");
+                    else if(response == 3)
+                        alert("密码必须由纯数字组成");
+                    else if(response == 1){
+                        alert("密码修改成功");
+                    }
+                })
+                .error(function (response) {
+                    alert("连接服务器失败");
+                })
+        }
+
+        //清空个人中心信息
+        $scope.personalMsg = {};
     };
 
     //搜索功能
@@ -149,6 +212,15 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
             .error(function(response){
                 alert("连接服务器失败");
             });
+    };
+
+    //打开个人中心
+    $scope.openPersonal = function () {
+        if($scope.isLogined == 0) {
+            alert("请先登录！");
+            return;
+        }
+        $scope.personalShow = 1;
     };
 
     //打开评论
@@ -334,6 +406,9 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
 
     //跳转到我的粉丝
     $scope.toFollower = function () {
+        //关闭个人中心
+        $scope.personalShow = 0;
+
         if($scope.isLogined == 0) {
             alert("请先登录！");
             return;
@@ -362,6 +437,9 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
 
     //跳转到我的关注
     $scope.toFollow = function () {
+        //关闭个人中心
+        $scope.personalShow = 0;
+
         if($scope.isLogined == 0) {
             alert("请先登录！");
             return;
@@ -434,7 +512,6 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
                 else{
                     $scope.isLogined = 1;
                     $scope.user = response;
-                    console.log($scope.user);
                     //在此添加登录后的后台代码
                 }
             })
@@ -502,6 +579,9 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
 
     //显示收藏脑书
     $scope.showStar = function () {
+        //关闭个人中心
+        $scope.personalShow = 0;
+
         $scope.initShow();
         if($scope.isLogined == 0) {
             alert("请先登录！");

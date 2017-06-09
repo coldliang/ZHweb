@@ -19,7 +19,7 @@
         <img src="img/logo.png">
         <nav>
             <a href="#" ng-click="toMyNaoshu()">我的脑书</a>
-            <a href="#" ng-click="toPersonal()">个人中心</a>
+            <a href="#" ng-click="openPersonal()">个人中心</a>
             <a href="#" ng-click="exitUser()" ng-show="isLogined">注销</a>
         </nav>
     </div>
@@ -37,7 +37,7 @@
         </div>
 
         <!--中间内容-->
-        <article>
+        <article ng-hide="personalShow">
             <form role="form" ng-submit="naoshuSearch()" novalidate>
                 <input type="text" placeholder="搜索脑书" class="form-control topInput" ng-model="searchContent">
             </form>
@@ -104,6 +104,47 @@
             </div>
         </article>
 
+        <!--个人中心-->
+        <article class="myWell" ng-show="personalShow">
+            <form class="bs-example bs-example-form" role="form">
+                <fieldset>
+                    <legend>修改资料</legend>
+                    <div class="form-group">
+                        <label for="name">用户名</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="name" ng-model="personalMsg.name" placeholder="输入昵称">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" ng-click="changeName()">修改</button>
+                            </span>
+                        </div><!-- /input-group -->
+                    </div>
+                    <div class="form-group">
+                        <label for="password">密码</label>
+                        <input type="text" class="form-control" id="password" ng-model="personalMsg.password" placeholder="输入密码">
+                    </div>
+                    <div class="form-group">
+                        <label for="pwdAgain">确认密码</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="pwdAgain" ng-model="personalMsg.pwdAgain" placeholder="确认密码">
+                            <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" ng-click="changePassword()">修改</button>
+                    </span>
+                        </div><!-- /input-group -->
+                    </div>
+                </fieldset>
+            </form>
+            <form action="php/uploadPng.php" method="post" enctype="multipart/form-data" role="form">
+                <div class="form-group">
+                    <label for="inputfile">新头像</label>
+                    <input type="file" id="inputfile" name="file">
+                    <p class="help-block">
+                        只能上传png、jpg、gif、jpeg文件，且大小不能超过1M，文件名不能包含中文。
+                    </p>
+                    <button class="btn btn-default" type="submit">上传头像</button>
+                </div>
+            </form>
+        </article>
+
         <!--用户栏-->
         <aside ng-cloak>
             <form ng-hide="isLogined" ng-submit="loginForm()" class="unlogined" role="form" novalidate>
@@ -159,6 +200,7 @@
                 </div>
             </div><!-- /.modal -->
 
+            <!--已登录-->
             <div ng-show="isLogined" class="logined">
                 <img class="img-circle" ng-src="{{user.imgPath}}"><br>
                 <h5 class="text-center"><strong>{{user.name}}</strong></h5>
