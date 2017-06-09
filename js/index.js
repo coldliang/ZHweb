@@ -47,6 +47,7 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
                 dataLength = 0;
                 j = 0;
                 page = 1;
+
                 //获取数据长度并计算页数
                 for(j in $scope.wellData){
                     dataLength++;
@@ -54,6 +55,7 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
                     if(j%5 === 0)    page++;
                 }
                 $scope.dataPage = {};
+
                 //将页数存入$scope.dataPage中
                 for(var k=1; k <= page; k++){
                     jsPage[k] = new Array();
@@ -67,6 +69,8 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
                     $scope.showData[i] = $scope.wellData[i];
                     $scope.showData[i].commentShow = 0;
                 }
+
+                // console.log($scope.wellData);
             })
             .error(function(response){
                 alert("连接服务器失败");
@@ -190,6 +194,37 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
         $scope.showData[index+1].modalPngClass = "";
     };
 
+    //关注
+    $scope.follow = function (followId) {
+        //检测是否已登录
+        if($scope.isLogined == 0) {
+            alert("请先登录！");
+            return;
+        }
+
+        $http({
+            method: 'post',
+            url: 'php/follow.php',
+            data: followId,
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        })
+            .success(function(response){
+                if(response == 1){
+                    alert("关注成功")
+                }
+                else if(response == 0)
+                    alert("已取消关注");
+                else if(response == 2)
+                    alert("怎么可以自己关注自己？");
+                else
+                    console.log(response);
+                    // alert(response);
+            })
+            .error(function(response){
+                alert("连接服务器失败");
+            });
+    };
+    
     //登录
     $scope.loginForm = function(){
         $scope.close();

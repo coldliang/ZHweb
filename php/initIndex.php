@@ -17,13 +17,14 @@
         $mysqli->query("set names utf8");//插入数据库乱码解决办法
 
         $i = 1;
-        $sql = "SELECT a.ntId,a.ntName,a.ntPath,a.abstract,a.ctNum,a.png,a.thumbsUp,b.name,b.imgPath 
+        $sql = "SELECT a.ntId,a.ntName,a.ntPath,a.abstract,a.ctNum,a.png,a.thumbsUp,b.name,b.imgPath,b.userId 
         FROM nt a JOIN user b 
         ON a.userId = b.userId ORDER BY a.ntId DESC";
         $result = $mysqli->query($sql);
         if ($result->num_rows > 0) {
             // 输出每行数据
             while($row = $result->fetch_assoc()) {
+                $data[$i]["userId"] = $row["userId"];
                 $data[$i]["ntId"] = $row["ntId"];
                 $data[$i]["ntName"] = $row["ntName"];
                 $data[$i]["ntPath"] = $row["ntPath"];

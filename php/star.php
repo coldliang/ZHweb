@@ -42,12 +42,6 @@
             $stmt->bind_param('iii',$id,$postData,$_COOKIE["userId"]);
             $stmt->execute();
 
-            //更新user表
-            $sql = "UPDATE user SET star=star+1 WHERE userId = ?";
-            $stmt = $mysqli->prepare($sql);
-            $stmt->bind_param('i',$_COOKIE["userId"]);
-            $stmt->execute();
-
             echo 1;
         }
         else {
