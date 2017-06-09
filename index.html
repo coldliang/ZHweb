@@ -60,9 +60,7 @@
                     </div>
                     <div class="col-sm-4">
                         <span class="glyphicon glyphicon-star pull-right followBtn" title="关注" ng-click="follow(x.userId)"></span>
-                        <a href="#" title="查看大图">
-                            <img ng-src="{{x.png}}+'?'+{{x.ntId}}" class="pull-right img-right" ng-click="openBigPng($index)">
-                        </a>
+                        <img title="查看大图" ng-src="{{x.png}}+'?'+{{x.ntId}}" class="pull-right img-right" ng-click="openBigPng($index)">
 
                         <!--图片模态框-->
                         <div class="modalBack" ng-class="x.modalBackClass" ng-click="closeBigPng($index)">

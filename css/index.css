@@ -129,6 +129,7 @@ article {
     height: 105px;
     padding-top: 5px;
     margin-right: 20px;
+    cursor: pointer;
 }
 
 .userShow {
