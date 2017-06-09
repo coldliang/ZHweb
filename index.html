@@ -20,7 +20,7 @@
         <nav>
             <a href="#" ng-click="toMyNaoshu()">我的脑书</a>
             <a href="#" ng-click="toPersonal()">个人中心</a>
-            <a href="#" ng-click="exitUser()" ng-show="isLogined">退出</a>
+            <a href="#" ng-click="exitUser()" ng-show="isLogined">注销</a>
         </nav>
     </div>
 </header>
@@ -38,10 +38,18 @@
 
         <!--中间内容-->
         <article>
-            <form role="form">
-                <input type="text" placeholder="搜索人名或者脑书名" class="form-control topInput">
+            <form role="form" ng-submit="naoshuSearch()" novalidate>
+                <input type="text" placeholder="搜索脑书" class="form-control topInput" ng-model="searchContent">
             </form>
-            <div class="myWell"  ng-repeat="x in showData" ng-cloak>
+
+            <!--人名搜索-->
+            <div class="userShow" ng-show="userSearchShow">
+                <h5 ng-repeat="z in searchUser" ng-show="searchUser"><a href="#" ng-click="showUserNaoshu(z.name)">{{z.name}}</a></h5>
+                <h5 ng-hide="searchUser">未搜索到相关人员</h5>
+            </div>
+
+            <!--ng-cloak页面加载时防止闪烁-->
+            <div class="myWell"  ng-repeat="x in showData" ng-show="naoshuShow" ng-cloak>
                 <div class="row">
                     <div class="col-sm-2">
                         <img src="img/default.jpg" class="img-circle img-left">
@@ -89,7 +97,7 @@
             </div>
 
             <!--分页-->
-            <div style="text-align: center">
+            <div style="text-align: center" ng-show="naoshuShow">
                 <ul class="pagination pagination-lg">
                     <li ng-click="firstPage()"><a href="#">&laquo;</a></li>
                     <li ng-repeat="z in dataPage" ng-class="z.class" ng-click="turnTo(z.page)"><a href="#">{{z.page}}</a></li>

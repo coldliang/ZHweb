@@ -69,7 +69,7 @@
             </li>
             <li role="presentation" class="divider"></li>
             <li role="presentation">
-                <a role="menuitem" tabindex="-1" href="#">注销</a>
+                <a href="#" role="menuitem" tabindex="-1" ng-click="exitUser()">注销</a>
             </li>
         </ul>
     </div>
@@ -141,7 +141,7 @@
                     console.log("服务器请求失败");
                 });
         };
-	//test
+
         //删除函数
         $scope.deleteNt = function (ntId,ntName) {
             var r = confirm("确定删除 "+ntName+" ?");
@@ -161,6 +161,24 @@
                         alert("连接服务器失败");
                     });
             }
+        };
+
+        //退出函数
+        $scope.exitUser = function () {
+            $http({
+                method: 'get',
+                url: 'php/exitUser.php',
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+            })
+                .success(function (response) {
+                    localStorage.removeItem("myUserId");
+                    $scope.loginData = {};
+                    $scope.needCheck();
+                })
+                .error(function (response) {
+                    alert("连接服务器失败")
+                });
+            window.location.href = "index.html";
         };
 
         //重命名函数

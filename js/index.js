@@ -31,6 +31,12 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
         $scope.dataPage = {};
         $scope.commentSubmitText = {};
 
+        //搜索功能
+        $scope.searchContent = "";
+        $scope.naoshuShow = 1;
+        $scope.userSearchShow = 0;
+        $scope.searchUser = {};
+
         $scope.needCheck();
 
         //初始化脑书展示
@@ -39,37 +45,10 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
 
     //初始化脑书展示函数
     $scope.initIndex = function () {
+        $scope.initShow();
         $http.get("php/initIndex.php")
             .success(function(response){
-                $scope.wellData = {};
-                $scope.showData = {};
-                $scope.wellData = response;
-                dataLength = 0;
-                j = 0;
-                page = 1;
-
-                //获取数据长度并计算页数
-                for(j in $scope.wellData){
-                    dataLength++;
-                    $scope.wellData[j].png = $scope.wellData[j].png + "?" +$scope.wellData[j].ntId;
-                    if(j%5 === 0)    page++;
-                }
-                $scope.dataPage = {};
-
-                //将页数存入$scope.dataPage中
-                for(var k=1; k <= page; k++){
-                    jsPage[k] = new Array();
-                    jsPage[k].page = k;
-                    jsPage[k].class = "";
-                    $scope.dataPage[k] = jsPage[k];
-                }
-                $scope.dataPage[1].class = "active";
-                i = 1;
-                for(; i<=5 && $scope.wellData[i]; i++){
-                    $scope.showData[i] = $scope.wellData[i];
-                    $scope.showData[i].commentShow = 0;
-                }
-
+                $scope.changeNaoshu(response);
                 // console.log($scope.wellData);
             })
             .error(function(response){
@@ -77,12 +56,42 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
             });
     };
 
+    //搜索功能
+    $scope.naoshuSearch = function () {
+        $http({
+            method: 'post',
+            url: 'php/search.php',
+            data: $scope.searchContent,
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        })
+            .success(function (response) {
+                if(response == 0)
+                    alert("未找到搜索的脑书");
+                else{
+                    if(response.user){
+                        $scope.userSearchShow = 1;
+                        $scope.searchUser = response.user;
+                    }
+
+                    //显示脑书
+                    if(response.nt){
+                        $scope.changeNaoshu(response.nt);
+                    }
+                    else {
+                        $scope.naoshuShow = 0;
+                    }
+                }
+            })
+            .error(function (response) {
+                alert("连接服务器失败")
+            })
+    };
+
     //退出登录
     $scope.exitUser = function () {
         $http({
-            method: 'post',
+            method: 'get',
             url: 'php/exitUser.php',
-            data: $scope.commentText,
             headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
         })
             .success(function (response) {
@@ -291,6 +300,26 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
         window.location.href = "naoshu.html";
     };
 
+    //根据人名遍历脑书
+    $scope.showUserNaoshu = function (name) {
+        $http({
+            method: 'post',
+            url: 'php/userNaoshu.php',
+            data: name,
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        })
+            .success(function(response){
+                if(response)
+                    $scope.changeNaoshu(response);
+                else
+                    alert("该用户尚未创建任何脑书");
+                $scope.initShow();
+            })
+            .error(function(response){
+                alert("连接服务器失败");
+            });
+    };
+
     //跳转到个人中心
     $scope.toPersonal = function () {
         if($scope.isLogined == 0) {
@@ -432,6 +461,7 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
 
     //显示收藏脑书
     $scope.showStar = function () {
+        $scope.initShow();
         if($scope.isLogined == 0) {
             alert("请先登录！");
             return;
@@ -447,38 +477,52 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
                     alert("你还没有收藏任何脑书");
                 }
                 else {
-                    $scope.wellData = {};
-                    $scope.showData = {};
-                    $scope.wellData = response;
-                    dataLength = 0;
-                    j = 0;
-                    page = 1;
-                    //获取数据长度并计算页数
-                    for(j in $scope.wellData){
-                        dataLength++;
-                        $scope.wellData[j].png = $scope.wellData[j].png + "?" +$scope.wellData[j].ntId;
-                        if(j%5 === 0)    page++;
-                    }
-                    $scope.dataPage = {};
-                    //将页数存入$scope.dataPage中
-                    for(var k=1; k <= page; k++){
-                        jsPage[k] = new Array();
-                        jsPage[k].page = k;
-                        jsPage[k].class = "";
-                        $scope.dataPage[k] = jsPage[k];
-                    }
-                    $scope.dataPage[1].class = "active";
-                    i = 1;
-                    for(; i<=5 && $scope.wellData[i]; i++){
-                        $scope.showData[i] = $scope.wellData[i];
-                        $scope.showData[i].commentShow = 0;
-                    }
+                    $scope.changeNaoshu(response);
                 }
 
             })
             .error(function(response){
                 alert("连接服务器失败");
             });
+    };
+
+    //更改脑书显示内容
+    $scope.changeNaoshu = function (content) {
+        $scope.wellData = {};
+        $scope.showData = {};
+        $scope.wellData = content;
+        dataLength = 0;
+        j = 0;
+        page = 1;
+
+        //获取数据长度并计算页数
+        for(j in $scope.wellData){
+            dataLength++;
+            $scope.wellData[j].png = $scope.wellData[j].png + "?" +$scope.wellData[j].ntId;
+            if(j%5 === 0)    page++;
+        }
+        $scope.dataPage = {};
+
+        //将页数存入$scope.dataPage中
+        for(var k=1; k <= page; k++){
+            jsPage[k] = new Array();
+            jsPage[k].page = k;
+            jsPage[k].class = "";
+            $scope.dataPage[k] = jsPage[k];
+        }
+        $scope.dataPage[1].class = "active";
+        i = 1;
+        for(; i<=5 && $scope.wellData[i]; i++){
+            $scope.showData[i] = $scope.wellData[i];
+            $scope.showData[i].commentShow = 0;
+        }
+    };
+
+    //初始化中间栏不要参数，例如userSearchShow,naoshuShow等
+    $scope.initShow = function () {
+        $scope.userSearchShow = 0;
+        $scope.naoshuShow = 1;
+        $scope.searchContent = "";
     };
 
     //注册窗口清空错误函数

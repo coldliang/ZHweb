@@ -90,14 +90,6 @@ article {
     margin: 20px auto;
 }
 
-.myWell {
-    padding: 20px 10px 20px;
-    margin-bottom: 10px;
-    background-color: white;
-    box-sizing: border-box;
-    border-radius: 2px;
-}
-
 .modalBack {
     position: fixed;
     width: 0;
@@ -137,6 +129,22 @@ article {
     height: 105px;
     padding-top: 5px;
     margin-right: 20px;
+}
+
+.userShow {
+    padding: 20px 10px 20px;
+    margin-bottom: 10px;
+    background-color: white;
+    box-sizing: border-box;
+    border-radius: 2px;
+}
+
+.myWell {
+    padding: 20px 10px 20px;
+    margin-bottom: 10px;
+    background-color: white;
+    box-sizing: border-box;
+    border-radius: 2px;
 }
 
 .myWell h5 {

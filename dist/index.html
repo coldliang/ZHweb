@@ -67,7 +67,7 @@
             </li>
             <li role="presentation" class="divider"></li>
             <li role="presentation">
-                <a role="menuitem" tabindex="-1" href="#">注销</a>
+                <a role="menuitem" tabindex="-1" href="#" ng-click="exitUser()">注销</a>
             </li>
         </ul>
     </span>
@@ -135,7 +135,8 @@
                         $scope.newJson.ntName = prompt("请输入脑书名称","");
                         if($scope.newJson.ntName !== null) {
                             if($scope.newJson.ntName !== "" && $scope.newJson.ntName.length <= 20) {
-                                $scope.newJson.abstract = prompt("请写摘要","这家伙很懒，没写摘要");
+                                //获取提示框数据
+                                $scope.newJson.abstract = prompt("请写摘要","这家伙很懒，没写简介");
                                 if($scope.newJson.abstract !== null){
                                     //导入JSON数据
                                     $scope.newJson.jsonMsg = editor.minder.exportJson();
@@ -203,6 +204,24 @@
 //                        .success(function (response) {
 //                            console.log(response);
 //                        });
+                };
+
+                //退出函数
+                $scope.exitUser = function () {
+                    $http({
+                        method: 'get',
+                        url: '../php/exitUser.php',
+                        headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+                    })
+                        .success(function (response) {
+                            localStorage.removeItem("myUserId");
+                            $scope.loginData = {};
+                            $scope.needCheck();
+                        })
+                        .error(function (response) {
+                            alert("连接服务器失败")
+                        });
+                    window.location.href = "../index.html";
                 };
 
                 //检测cookie函数
