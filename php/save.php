@@ -37,6 +37,7 @@
         $stmt = $mysqli->prepare("INSERT INTO nt (userId, ntId, ntName, ntPath, abstract,png) VALUES (?,?,?,?,?,?)");
         $stmt->bind_param('iissss',$postData["userId"],$ntId,$postData["ntName"],$ntPath,$postData["abstract"],$png);
         file_put_contents($ntPath, json_encode($postData["jsonMsg"]));
+        $png = "../png/".$ntId.".png";
         file_put_contents($png,$pngData);
 
         $stmt->execute();

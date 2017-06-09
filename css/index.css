@@ -14,6 +14,17 @@ body {
     padding-top: 10px;
 }
 
+footer {
+    float: left;
+    width: 100%;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: #FAFAFA;
+    color: #9c9c9c;
+    text-align: center;
+    /*color: #000;*/
+}
+
 /*头部CSS*/
 header {
     background-color: white;

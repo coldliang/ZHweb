@@ -320,8 +320,8 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
         })
             .success(function(response){
                 if(response){//账号登录正确
-                    $scope.needCheck();
                     localStorage.myUserId = response;
+                    $scope.needCheck();
                 }
                 else if(response == 0){
                     $scope.alertShow = 1;
@@ -467,12 +467,13 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
     };
 
     //脑书跳转
-    $scope.jumpTo = function (ntId) {
+    $scope.jumpTo = function (visitedId,ntId) {
         if($scope.isLogined == 0) {
             alert("请先登录！");
             return;
         }
         localStorage.myNtId = ntId;
+        localStorage.visitedId = visitedId;
         window.location.href = "dist/index.html";
     };
 

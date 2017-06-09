@@ -14,6 +14,7 @@
             if ($result->num_rows > 0) {
                 // 输出每行数据
                 while ($row = $result->fetch_assoc()) {
+                    $data["userId"] = $row["userId"];
                     $data["name"] = $row["name"];
                     $data["imgPath"] = $row["imgPath"];
                     $data["ntNum"] = $row["ntNum"];

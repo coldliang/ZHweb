@@ -49,7 +49,8 @@
 </head>
 <body ng-app="kityminderDemo" ng-controller="MainController">
 <h1 class="editor-title">KityMinder Editor - Powered By FEX
-	<button class="btn btn-default" ng-click="saveForJson()">保存</button>
+	<button class="btn btn-default" ng-hide="visit" ng-click="saveForJson()">保存</button>
+    <button class="btn btn-default" ng-show="visit" ng-click="copyToMy()">复制为自己脑书</button>
 	<!--<button ng-disabled="true" ng-click="myTest()">测试按钮</button>-->
 	<!--<a ng-disabled="true" class="btn btn-default" href="../naoshu.html">返回</a>-->
     <span class="pull-right dropdown">
@@ -109,6 +110,11 @@
 				$scope.initEditor = function(editor, minder) {
 					window.editor = editor;
 					window.minder = minder;
+
+					$scope.visit = 0;
+					if(localStorage.myUserId !== localStorage.visitedId){
+					    $scope.visit = 1;
+                    }
 				};
 
                 //kityMinder初始化
@@ -204,6 +210,50 @@
 //                        .success(function (response) {
 //                            console.log(response);
 //                        });
+                };
+
+                $scope.copyToMy = function () {
+                    $scope.newJson = {};
+                    $scope.newJson.ntName = prompt("请输入脑书名称","");
+                    if($scope.newJson.ntName !== null) {
+                        if($scope.newJson.ntName !== "" && $scope.newJson.ntName.length <= 20) {
+                            //获取提示框数据
+                            $scope.newJson.abstract = prompt("请写摘要","这家伙很懒，没写简介");
+                            if($scope.newJson.abstract !== null){
+                                //导入JSON数据
+                                $scope.newJson.jsonMsg = editor.minder.exportJson();
+                                //导入脑图ID
+                                $scope.newJson.userId = localStorage.myUserId;
+                                //导入png图片数据
+                                editor.minder.exportData("png").then(function (content) {
+                                    $scope.newJson.png = content;
+                                    $http({
+                                        method: 'post',
+                                        url: '../php/save.php',
+                                        data: $scope.newJson,
+                                        headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+                                    })
+                                        .success(function(response){
+                                            if(response.length < 7){
+                                                localStorage.myNtId = response;
+                                                alert("复制成功");
+                                                localStorage.visitedId = localStorage.myUserId;
+                                                $scope.visit = 0;
+                                                console.log(response);
+                                            }
+                                            else {
+                                                alert(response);
+                                                console.log(response);
+                                            }
+                                        })
+                                        .error(function(response){
+                                            alert("连接服务器失败");
+                                        });
+                                });
+                            }
+                        }
+                        else alert("脑书名称非法");
+                    }
                 };
 
                 //退出函数

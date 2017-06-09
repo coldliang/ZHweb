@@ -55,7 +55,7 @@
                         <img src="img/default.jpg" class="img-circle img-left">
                     </div>
                     <div class="col-sm-6">
-                        <a ng-click="jumpTo(x.ntId)"><h5><b>{{x.name}}/{{x.ntName}}</b></h5></a>
+                        <a ng-click="jumpTo(x.userId,x.ntId)"><h5><b>{{x.name}}/{{x.ntName}}</b></h5></a>
                         {{x.abstract}}
                     </div>
                     <div class="col-sm-4">
@@ -222,8 +222,16 @@
         </aside>
         <!--用户栏结束-->
 
+
+
     </div>
 </div>
+<footer>
+    <div class="art-container">
+        当使用本站时，代表您已接受了本站的使用条款和隐私条款。版权所有，保留一切权利。 <a href="http://www.miitbeian.gov.cn/">渝ICP备17005970号-1</a>
+    </div>
+</footer>
+
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/angular.min.js"></script>
