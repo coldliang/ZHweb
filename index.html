@@ -69,9 +69,9 @@
                     </div>
                 </div>
                 <div class="wellBottom row text-center">
-                    <div class="col-sm-4" ng-click="star(x.ntId)"><span class="glyphicon glyphicon-heart-empty"></span></div>
-                    <div class="col-sm-4" ng-click="openComment($index,x.ntId)"><span class="glyphicon glyphicon-edit"></span>{{x.ctNum}}</div>
-                    <div class="col-sm-4" ng-click="thumbsUp($index,x.ntId)"><span class="glyphicon glyphicon-thumbs-up" ng-class="x.thumbsUpClass"></span>{{x.thumbsUp}}</div>
+                    <div class="col-sm-4" ng-click="star(x.ntId)" title="收藏"><span class="glyphicon glyphicon-heart-empty"></span></div>
+                    <div class="col-sm-4" ng-click="openComment($index,x.ntId)" title="评论"><span class="glyphicon glyphicon-edit"></span>{{x.ctNum}}</div>
+                    <div class="col-sm-4" ng-click="thumbsUp($index,x.ntId)" title="点赞"><span class="glyphicon glyphicon-thumbs-up" ng-class="x.thumbsUpClass"></span>{{x.thumbsUp}}</div>
                 </div>
                 <div class="comment" ng-show="x.commentShow">
 
