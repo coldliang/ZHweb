@@ -219,10 +219,13 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
         })
             .success(function(response){
                 if(response == 1){
-                    alert("关注成功")
+                    alert("关注成功");
+                    $scope.user.follow++;
                 }
-                else if(response == 0)
+                else if(response == 0){
                     alert("已取消关注");
+                    $scope.user.follow--;
+                }
                 else if(response == 2)
                     alert("怎么可以自己关注自己？");
                 else
@@ -335,7 +338,26 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
             alert("请先登录！");
             return;
         }
-        console.log("123");
+
+        $http({
+            method: 'post',
+            url: 'php/toFollower.php',
+            data: localStorage.myUserId,
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        })
+            .success(function(response){
+                if(response){
+                    $scope.userSearchShow = 1;
+                    $scope.naoshuShow = 0;
+                    $scope.searchUser = response;
+                }
+                else{
+                    alert("可惜了，你还没有任何粉丝");
+                }
+            })
+            .error(function(response){
+                alert("连接服务器失败");
+            });
     };
 
     //跳转到我的关注
@@ -344,7 +366,26 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
             alert("请先登录！");
             return;
         }
-        console.log("123");
+
+        $http({
+            method: 'post',
+            url: 'php/toFollow.php',
+            data: localStorage.myUserId,
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        })
+            .success(function(response){
+                if(response){
+                    $scope.userSearchShow = 1;
+                    $scope.naoshuShow = 0;
+                    $scope.searchUser = response;
+                }
+                else {
+                    alert("你还没关注任何人");
+                }
+            })
+            .error(function(response){
+                alert("连接服务器失败");
+            });
     };
 
     //脑书跳转
@@ -392,8 +433,8 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
                 }
                 else{
                     $scope.isLogined = 1;
-                    $scope.user.imgPath = response.imgPath;
-                    $scope.user.name = response.name;
+                    $scope.user = response;
+                    console.log($scope.user);
                     //在此添加登录后的后台代码
                 }
             })
@@ -447,7 +488,7 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
         })
             .success(function(response){
                 if(response == 1){
-                    alert("收藏成功")
+                    alert("收藏成功");
                 }
                 else if(response == 0)
                     alert("已取消收藏");
