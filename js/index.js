@@ -71,7 +71,7 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
             })
                 .success(function (response) {
                     if(response == 2)
-                        alert("名字太长");
+                        alert("名字太长，不能超过20个字符");
                     else if(response == 3)
                         alert("名字重复");
                     else if(response == 1){

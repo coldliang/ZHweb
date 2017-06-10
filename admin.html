@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>管理员</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <!--<link rel="stylesheet" type="text/css" href="css/reset.css">-->
+    <link rel="stylesheet" type="text/css" href="css/admin.css">
+
+</head>
+<body ng-app="myApp" ng-controller="myCtrl" data-spy="scroll" data-target="#myScrollspy" >
+    <!--登录界面-->
+    <form class="login form-horizontal jumbotron" ng-hide="isLogined" ng-submit="login()" role="form" novalidate>
+        <fieldset class="container">
+            <legend>管理员登录</legend>
+            <div class="form-group">
+                <label for="firstname" class="col-sm-2 control-label">账号</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="firstname" ng-model="admin.account" placeholder="请输入账号">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="lastname" class="col-sm-2 control-label">密码</label>
+                <div class="col-sm-10">
+                    <input type="password" class="form-control" id="lastname" ng-model="admin.password" placeholder="请输入密码">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-default">登录</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+
+    <!--管理界面-->
+    <div class="container" ng-show="isLogined">
+        <div class="jumbotron">
+            <h1>智慧脑书管理系统</h1>
+        </div>
+        <div class="row">
+            <div class="col-xs-3" id="myScrollspy">
+                <ul class="nav nav-tabs nav-stacked" id="myNav">
+                    <li class="active"><a href="#section-1">用户管理</a></li>
+                    <li><a href="#section-2">脑书管理</a></li>
+                    <li><a href="#section-3">评论管理</a></li>
+                    <li><a href="#section-4">帮助文档</a></li>
+                    <li><a href="#section-5">快速链接</a></li>
+                </ul>
+            </div>
+            <div class="col-xs-9">
+                <h2 id="section-1">用户管理</h2>
+                <table class="table table-hover">
+                    <thead>
+                    <tr class="container">
+                        <th class="col-sm-1">ID</th>
+                        <th class="col-sm-1">账号</th>
+                        <th class="col-sm-6">用户名</th>
+                        <th class="col-sm-4">密码</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="user in userMsg" class="container">
+                        <td class="col-sm-1">{{user.userId}}</td>
+                        <td class="col-sm-1">{{user.user}}</td>
+                        <td class="col-sm-6">
+                            {{user.name}} <span class="glyphicon glyphicon-edit userBtn" ng-click="user.nameShow = !user.nameShow"></span>
+                            <span ng-show="user.nameShow">
+                                <br>
+                                <input type="text" ng-model="user.rename" ng-blur="changeName($index)">
+                            </span>
+                        </td>
+                        <td class="col-sm-4">
+                            {{user.password}} <span class="glyphicon glyphicon-edit userBtn" ng-click="user.pwdShow = !user.pwdShow"></span>
+                            <span ng-show="user.pwdShow">
+                                <br>
+                                <input type="text" ng-model="user.repwd" ng-blur="changePwd($index)">
+                            </span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <hr>
+                <h2 id="section-2">脑书管理</h2>
+                <table class="table table-hover">
+                    <thead>
+                    <tr class="container">
+                        <th class="col-sm-1">用户ID</th>
+                        <th class="col-sm-1">脑书ID</th>
+                        <th class="col-sm-3">脑书名称</th>
+                        <th class="col-sm-6">脑书简介</th>
+                        <th class="col-sm-1">删除</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="container" ng-repeat="naoshu in naoshuMsg">
+                        <td class="col-sm-1">{{naoshu.userId}}</td>
+                        <td class="col-sm-1">{{naoshu.ntId}}</td>
+                        <td class="col-sm-3">
+                            {{naoshu.ntName}} <span class="glyphicon glyphicon-edit userBtn" ng-click="naoshu.nameShow = !naoshu.nameShow"></span>
+                            <span ng-show="naoshu.nameShow">
+                                <br>
+                                <input type="text" ng-model="naoshu.rename" ng-blur="changeNaoshuName($index)">
+                            </span>
+                        </td>
+                        <td class="col-sm-6">
+                            {{naoshu.abstract}} <span class="glyphicon glyphicon-edit userBtn" ng-click="naoshu.abstractShow = !naoshu.abstractShow"></span>
+                            <span ng-show="naoshu.abstractShow">
+                                <br>
+                                <input type="text" ng-model="naoshu.reabstract" ng-blur="changeNaoshuAbstract($index)">
+                            </span>
+                        </td>
+                        <td class="col-sm-1"><span class="glyphicon glyphicon-remove deleteBtn" ng-click="deleteNt(naoshu.ntId)"></span></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <hr>
+                <h2 id="section-3">评论管理</h2>
+                <table class="table table-hover">
+                    <thead>
+                    <tr class="container">
+                        <th class="col-sm-1">ID</th>
+                        <th class="col-sm-1">评论人</th>
+                        <th class="col-sm-3">评论内容</th>
+                        <th class="col-sm-1">删除</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="container" ng-repeat="comment in commentMsg">
+                        <td class="col-sm-1">{{comment.ctId}}</td>
+                        <td class="col-sm-1">{{comment.ctName}}</td>
+                        <td class="col-sm-9">{{comment.ctText}}</td>
+                        <td class="col-sm-1"><span class="glyphicon glyphicon-remove deleteBtn" ng-click="deleteComment(comment.ntId,comment.ctId)"></span></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <hr>
+                <h2 id="section-4">帮助文档</h2>
+                <p>本管理系统提供用户、脑书、评论的管理功能。</p>
+                <p>其中用户不提供删除功能，因为会涉及大量连带问题，所以不给予管理员删除用户的权限。</p>
+                <p>允许修改的项目旁边都有修改按钮，其中的编辑项目，需要出发blur函数才能成功修改，即让输入框获得焦点（编辑内容时就会获得焦点），再失去焦点。</p>
+                <hr>
+                <h2 id="section-5">快速链接</h2>
+                <a href="index.html">首页</a>
+                <br>
+                <br>
+                </div>
+        </div>
+    </div>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/angular.min.js"></script>
+<script src="js/angular-animate.min.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

@@ -7,7 +7,7 @@
  */
     header("Content-type: text/html; charset=utf-8");
     error_reporting(0);
-    $postData = file_get_contents("php://input",true);
+    $postData = json_decode(file_get_contents("php://input",true),true);
 
     $mysqli = new mysqli('127.0.0.1', 'root', '','ZHnt');
     if($mysqli->connect_error) {
@@ -16,14 +16,14 @@
     else {
         $mysqli->query("set names utf8");//插入数据库乱码解决办法
 
-        $ntId = $postData;
-        $stmt = $mysqli->prepare("DELETE FROM nt WHERE ntId=?");
-        $stmt->bind_param('i',$ntId);
-        $deletedNtPath = "../json/".$ntId.".json";
-        unlink($deletedNtPath);
-        $deletedNtPath = "../png/".$ntId.".png";
-        unlink($deletedNtPath);
+        $ctId = $postData["ctId"];
+        $stmt = $mysqli->prepare("DELETE FROM comment WHERE ctId=?");
+        $stmt->bind_param('i',$ctId);
         $stmt->execute();
+
+        $ntId = $postData["ntId"];
+        $sql = "UPDATE nt SET ctNum = ctNum-1 WHERE ntId = ".$ntId;
+        $mysqli->query($sql);
 
         $stmt->close();
         $mysqli->close();
