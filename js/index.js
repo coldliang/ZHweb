@@ -626,7 +626,8 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
         for(j in $scope.wellData){
             dataLength++;
             $scope.wellData[j].png = $scope.wellData[j].png + "?" +$scope.wellData[j].ntId;
-            if(j%5 === 0)    page++;
+            if(j%5 === 1)    page++;
+            console.log(j);
         }
         $scope.dataPage = {};
 
