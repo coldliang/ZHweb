@@ -6,6 +6,7 @@ app.controller('myCtrl', function($scope,$http) {
     $scope.isLogined = sessionStorage.adminIsLogined;
     $scope.admin = {};
 
+    //获取用户数据
     $http.get("php/getUser.php")
         .success(function(response){
             $scope.userMsg = response;
@@ -14,6 +15,7 @@ app.controller('myCtrl', function($scope,$http) {
             alert("连接服务器失败");
         });
 
+    //获取脑书数据
     $http.get("php/getNaoshu.php")
         .success(function(response){
             $scope.naoshuMsg = response;
@@ -22,6 +24,7 @@ app.controller('myCtrl', function($scope,$http) {
             alert("连接服务器失败");
         });
 
+    //获取评论数据
     $http.get("php/getComment.php")
         .success(function(response){
             $scope.commentMsg = response;

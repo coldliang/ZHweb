@@ -101,13 +101,28 @@ article {
     margin: 20px auto;
 }
 
-.modalBack {
+.modalPngContainer {
     position: fixed;
     width: 0;
     height: 0;
     top: 0;
     left: 0;
-    z-index: 5;
+    z-index: 4;
+    text-align: center;
+    display: -webkit-box;
+    -webkit-box-pack:center;
+    -webkit-box-align:center;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.modalBack {
+    /*position: fixed;*/
+    width: 0;
+    height: 0;
+    /*top: 0;*/
+    /*left: 0;*/
+    /*z-index: 5;*/
     /*background-color: rgba(255,255,255,0.6);*/
     background-color: rgba(54,127,195,0.2);
     text-align: center;

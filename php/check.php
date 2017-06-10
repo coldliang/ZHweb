@@ -17,6 +17,7 @@
                     $data["userId"] = $row["userId"];
                     $data["name"] = $row["name"];
                     $data["imgPath"] = $row["imgPath"];
+                    $data["password"] = $row["password"];
                     $data["ntNum"] = $row["ntNum"];
                     $data["follow"] = $row["follow"];
                     $data["follower"] = $row["follower"];

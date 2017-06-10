@@ -40,6 +40,14 @@
             color: red;
         }
 
+        .userBtn {
+            cursor: pointer;
+        }
+
+        .userBtn:hover {
+            color: #0088cc;
+        }
+
         .jumpTo {
             color: #3A80C0;
             cursor: pointer;
@@ -80,19 +88,30 @@
         <button class="btn btn-info"><a href="#" ng-click="newNaoshu()"><span class="glyphicon glyphicon-plus"></span> 新建脑书</a></button>
         <table class="table table-hover" ng-init="tableInit()">
             <thead>
-            <tr>
-                <th>脑书名</th>
-                <th>简介</th>
-                <th>重命名</th>
-                <th>删除</th>
+            <tr class="container">
+                <th class="col-sm-2">脑书名</th>
+                <th class="col-sm-9">简介</th>
+                <th class="col-sm-1">删除</th>
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="x in naoshuData">
-                <td><a ng-click="jumpTo(x.ntId)" class="jumpTo">{{x.ntName}}</a></td>
-                <td>{{x.abstract}}</td>
-                <td><input type="text" ng-model="rename[x.id]" ng-blur="changeNtName(x.ntName,rename[x.id],x.ntId)"></td>
-                <td><span class="glyphicon glyphicon-remove deleteBtn" ng-click="deleteNt(x.ntId,x.ntName)"></span></td>
+            <tr class="container" ng-repeat="x in naoshuData">
+                <td class="col-sm-2">
+                    <a ng-click="jumpTo(x.ntId)" class="jumpTo">{{x.ntName}}</a>
+                    <span class="glyphicon glyphicon-edit userBtn" ng-click="x.nameShow = !x.nameShow"></span>
+                    <span ng-show="x.nameShow">
+                        <br>
+                        <input type="text" ng-model="x.rename" ng-blur="changeNtName(x.ntName,x.rename,x.ntId)">
+                    </span>
+                </td>
+                <td class="col-sm-9">
+                    {{x.abstract}} <span class="glyphicon glyphicon-edit userBtn" ng-click="x.abstractShow = !x.abstractShow"></span>
+                    <span ng-show="x.abstractShow">
+                        <br>
+                        <input type="text" ng-model="x.reabstract" ng-blur="changeNaoshuAbstract(x.reabstract,x.ntId)">
+                    </span>
+                </td>
+                <td class="col-sm-1"><span class="glyphicon glyphicon-remove deleteBtn" ng-click="deleteNt(x.ntId,x.ntName)"></span></td>
             </tr>
             </tbody>
         </table>
@@ -183,7 +202,7 @@
 
         //重命名函数
         $scope.changeNtName = function (ntName,rename,ntId) {
-            if(ntName !== rename && rename.length <= 20)//与原名不同且长度不大于20
+            if(rename != "" && ntName !== rename && rename.length <= 20)//与原名不同且长度不大于20
             {
                 $scope.renameData = {};
                 $scope.renameData.rename = rename;
@@ -193,6 +212,28 @@
                     url: 'php/rename.php',
                     data: $scope.renameData,
                     headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+                })
+                    .success(function(response){
+                        $scope.tableInit();
+                    })
+                    .error(function(response){
+                        alert("连接服务器失败");
+                    });
+            }
+        };
+
+        //修改脑书简介
+        $scope.changeNaoshuAbstract = function (reabstract,ntId) {
+            if(reabstract != "" && reabstract.length <= 400)//与简介不能为空且长度不大于400
+            {
+                $scope.postData = {};
+                $scope.postData.reabstract = reabstract;
+                $scope.postData.ntId = ntId;
+                $http({
+                    method: 'post',
+                    url: 'php/changeAbstract.php',
+                    data: $scope.postData,
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
                 })
                     .success(function(response){
                         $scope.tableInit();

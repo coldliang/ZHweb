@@ -112,7 +112,7 @@
 					window.minder = minder;
 
 					$scope.visit = 0;
-					if(localStorage.myUserId !== localStorage.visitedId){
+					if(localStorage.myUserId !== localStorage.visitedId && localStorage.visitedId != 0){
 					    $scope.visit = 1;
                     }
 				};

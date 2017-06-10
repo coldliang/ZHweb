@@ -8,7 +8,7 @@ var jsPage = new Array();
 var winH = window.innerHeight;
 var bdContainer = document.getElementById('body-container');
 bdContainer.style.height = winH-52+'px';
-var app = angular.module('xiongmaoApp', []);
+var app = angular.module('xiongmaoApp', ['ngAnimate']);
 app.controller('xiongmaoCtrl', function($scope,$http) {
     //初始化
     $scope.myOnInit = function(){
@@ -95,6 +95,10 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
                 alert("两次输入的密码不一致");
                 return;
             }
+            if($scope.personalMsg.oldPassword !== $scope.user.password){
+                alert("原密码错误");
+                return;
+            }
             $http({
                 method: 'post',
                 url: 'php/changePwd.php',
@@ -107,6 +111,7 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
                     else if(response == 3)
                         alert("密码必须由纯数字组成");
                     else if(response == 1){
+                        $scope.user.password = $scope.personalMsg.password;
                         alert("密码修改成功");
                     }
                 })
@@ -615,7 +620,7 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
         $scope.wellData = content;
         dataLength = 0;
         j = 0;
-        page = 1;
+        page = 0;
 
         //获取数据长度并计算页数
         for(j in $scope.wellData){

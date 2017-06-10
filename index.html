@@ -63,8 +63,10 @@
                         <img title="查看大图" ng-src="{{x.png}}+'?'+{{x.ntId}}" class="pull-right img-right" ng-click="openBigPng($index)">
 
                         <!--图片模态框-->
-                        <div class="modalBack" ng-class="x.modalBackClass" ng-click="closeBigPng($index)">
-                            <img id="img" ng-src="{{x.png}}+'?'+{{x.ntId}}">
+                        <div class="modalPngContainer" ng-class="x.modalBackClass">
+                            <div class="modalBack" ng-class="x.modalBackClass" ng-click="closeBigPng($index)">
+                                <img id="img" ng-src="{{x.png}}+'?'+{{x.ntId}}">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -119,13 +121,17 @@
                         </div><!-- /input-group -->
                     </div>
                     <div class="form-group">
+                        <label for="oldPassword">初始密码</label>
+                        <input type="password" class="form-control" id="oldPassword" ng-model="personalMsg.oldPassword" placeholder="输入原密码">
+                    </div>
+                    <div class="form-group">
                         <label for="password">密码</label>
-                        <input type="text" class="form-control" id="password" ng-model="personalMsg.password" placeholder="输入密码">
+                        <input type="password" class="form-control" id="password" ng-model="personalMsg.password" placeholder="输入密码">
                     </div>
                     <div class="form-group">
                         <label for="pwdAgain">确认密码</label>
                         <div class="input-group">
-                            <input type="text" class="form-control" id="pwdAgain" ng-model="personalMsg.pwdAgain" placeholder="确认密码">
+                            <input type="password" class="form-control" id="pwdAgain" ng-model="personalMsg.pwdAgain" placeholder="确认密码">
                             <span class="input-group-btn">
                         <button class="btn btn-default" type="button" ng-click="changePassword()">修改</button>
                     </span>
@@ -235,6 +241,7 @@
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/angular.min.js"></script>
+<script src="js/angular-animate.min.js"></script>
 <!--<script src="js/less.min.js"></script>-->
 <script src="js/index.js"></script>
 </body>
