@@ -33,7 +33,11 @@ header {
 .hd-line {
     height: 2px;
     width: 100%;
-    background-color: #3A80C0;
+    /*background-color: #3A80C0;*/
+    background: -webkit-linear-gradient(left, #508cf1, #39B8FE); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(left, #508cf1, #39B8FE); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(left, #508cf1, #39B8FE); /* Firefox 3.6 - 15 */
+    background: linear-gradient(left, #508cf1, #39B8FE); /* 标准的语法（必须放在最后） */
 }
 
 .hd-container {
@@ -83,7 +87,11 @@ header {
 }
 
 .nav-left  a:hover {
-    background-color: #3A80C0;
+    /*background-color: #3A80C0;*/
+    background: -webkit-linear-gradient(left, #508cf1, #39B8FE); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(left, #508cf1, #39B8FE); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(left, #508cf1, #39B8FE); /* Firefox 3.6 - 15 */
+    background: linear-gradient(left, #508cf1, #39B8FE); /* 标准的语法（必须放在最后） */
 }
 /*导航栏CSS结束*/
 

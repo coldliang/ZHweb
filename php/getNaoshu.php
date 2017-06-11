@@ -8,7 +8,7 @@
     } else {
         $mysqli->query("set names utf8");//插入数据库乱码解决办法
 
-        $sql = "SELECT * FROM nt";
+        $sql = "SELECT * FROM nt ORDER BY ntId ASC";
         $i = 1;
         $result = $mysqli->query($sql);
         if ($result->num_rows > 0) {

@@ -53,7 +53,6 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
         $http.get("php/initIndex.php")
             .success(function(response){
                 $scope.changeNaoshu(response);
-                // console.log($scope.wellData);
             })
             .error(function(response){
                 alert("连接服务器失败");
@@ -381,14 +380,16 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
     };
 
     //根据人名遍历脑书
-    $scope.showUserNaoshu = function (name) {
+    $scope.showUserNaoshu = function (userId) {
         $http({
             method: 'post',
             url: 'php/userNaoshu.php',
-            data: name,
+            data: userId,
             headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
         })
             .success(function(response){
+                console.log($scope.searchUser);
+                console.log(response);
                 if(response)
                     $scope.changeNaoshu(response);
                 else
@@ -398,6 +399,11 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
             .error(function(response){
                 alert("连接服务器失败");
             });
+    };
+
+    //展示自己的脑书
+    $scope.showMyNaoshu = function () {
+        $scope.showUserNaoshu(localStorage.myUserId);
     };
 
     //跳转到个人中心
@@ -461,6 +467,7 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
                     $scope.userSearchShow = 1;
                     $scope.naoshuShow = 0;
                     $scope.searchUser = response;
+                    console.log(response);
                 }
                 else {
                     alert("你还没关注任何人");
@@ -627,7 +634,6 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
             dataLength++;
             $scope.wellData[j].png = $scope.wellData[j].png + "?" +$scope.wellData[j].ntId;
             if(j%5 === 1)    page++;
-            console.log(j);
         }
         $scope.dataPage = {};
 

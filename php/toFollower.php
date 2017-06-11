@@ -22,7 +22,7 @@ else {
     $mysqli->query("set names utf8");
 
     $i = 1;
-    $sql = "SELECT DISTINCT a.name 
+    $sql = "SELECT DISTINCT a.name,a.userId
         FROM user a JOIN follow b 
         ON a.userId = b.followerId
         WHERE b.followId = ".$postData;
@@ -31,6 +31,7 @@ else {
         // 输出每行数据
         while($row = $result->fetch_assoc()) {
             $data[$i]["name"] = $row["name"];
+            $data[$i]["userId"] = $row["userId"];
             $i++;
         }
     }

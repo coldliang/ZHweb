@@ -18,7 +18,7 @@
     <div class="hd-container">
         <img src="img/logo.png">
         <nav>
-            <a href="#" ng-click="toMyNaoshu()">我的脑书</a>
+            <a href="#" ng-click="toMyNaoshu()">脑书管理</a>
             <a href="#" ng-click="openPersonal()">个人中心</a>
             <a href="#" ng-click="exitUser()" ng-show="isLogined">注销</a>
         </nav>
@@ -31,6 +31,7 @@
         <!--左边导航栏-->
         <div class="nav-left">
             <a ng-click="initIndex()"><strong>首页</strong></a>
+            <a ng-click="showMyNaoshu()"><strong>我的脑书</strong></a>
             <a ng-click="showStar()"><strong>我的收藏</strong></a>
             <a href="#" ng-click="toFollower()"><strong>我的粉丝</strong></a>
             <a href="#" ng-click="toFollow()"><strong>我的关注</strong></a>
@@ -44,7 +45,7 @@
 
             <!--人名搜索-->
             <div class="userShow" ng-show="userSearchShow">
-                <h5 ng-repeat="z in searchUser" ng-show="searchUser"><a href="#" ng-click="showUserNaoshu(z.name)">{{z.name}}</a></h5>
+                <h5 ng-repeat="z in searchUser" ng-show="searchUser"><a href="#" ng-click="showUserNaoshu(z.userId)">{{z.name}}</a></h5>
                 <h5 ng-hide="searchUser">未搜索到相关人员</h5>
             </div>
 
@@ -52,7 +53,7 @@
             <div class="myWell"  ng-repeat="x in showData" ng-show="naoshuShow" ng-cloak>
                 <div class="row">
                     <div class="col-sm-2">
-                        <img src="img/default.jpg" class="img-circle img-left">
+                        <img ng-src="{{x.imgPath}}" class="img-circle img-left">
                     </div>
                     <div class="col-sm-6">
                         <a ng-click="jumpTo(x.userId,x.ntId)"><h5><b>{{x.name}}/{{x.ntName}}</b></h5></a>

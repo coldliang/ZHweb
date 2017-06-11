@@ -22,13 +22,14 @@
         $mysqli->query("set names utf8");
 
         $i = 1;
-        $sql = "SELECT name FROM user";
+        $sql = "SELECT name,userId FROM user";
         $result = $mysqli->query($sql);
         if ($result->num_rows > 0) {
             // 输出每行数据
             while($row = $result->fetch_assoc()) {
                 if(strchr($row["name"],$postData)){
                     $data["user"][$i]["name"] = $row["name"];
+                    $data["user"][$i]["userId"] = $row["userId"];
                     $i++;
                 }
             }

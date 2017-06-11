@@ -20,7 +20,7 @@
             {
                 //保存文件
                 move_uploaded_file($_FILES["file"]["tmp_name"], "../img/".$_FILES["file"]["name"]);
-                echo "修改头像成功";
+                echo "修改头像成功,头像生效需要刷新网页";
 
                 $mysqli = new mysqli('127.0.0.1', 'root', '', 'ZHnt');
                 if ($mysqli->connect_error) {
