@@ -37,6 +37,10 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
         $scope.userSearchShow = 0;
         $scope.searchUser = {};
 
+        // 弹窗初始化
+        $scope.myAlertShow = 0;
+        $scope.popupAnimate = "marginTop40";
+
         $scope.personalMsg = {};
         $scope.needCheck();
 
@@ -55,7 +59,7 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
                 $scope.changeNaoshu(response);
             })
             .error(function(response){
-                alert("连接服务器失败");
+                $scope.myAlert("连接服务器失败");
             });
     };
 
@@ -70,16 +74,16 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
             })
                 .success(function (response) {
                     if(response == 2)
-                        alert("名字太长，不能超过20个字符");
+                        $scope.myAlert("名字太长，不能超过20个字符");
                     else if(response == 3)
-                        alert("名字重复");
+                        $scope.myAlert("名字重复");
                     else if(response == 1){
                         $scope.needCheck();
-                        alert("名字修改成功");
+                        $scope.myAlert("名字修改成功");
                     }
                 })
                 .error(function (response) {
-                    alert("连接服务器失败")
+                    $scope.myAlert("连接服务器失败")
                 })
         }
 
@@ -91,13 +95,14 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
     $scope.changePassword = function () {
         if($scope.personalMsg.password){
             if($scope.personalMsg.password !== $scope.personalMsg.pwdAgain){
-                alert("两次输入的密码不一致");
+                $scope.myAlert("两次输入的密码不一致");
                 return;
             }
             if($scope.personalMsg.oldPassword !== $scope.user.password){
-                alert("原密码错误");
+                $scope.myAlert("原密码错误"+$scope.user.password);
                 return;
             }
+            var oldPassword = $scope.personalMsg.password;
             $http({
                 method: 'post',
                 url: 'php/changePwd.php',
@@ -106,16 +111,16 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
             })
                 .success(function (response) {
                     if(response == 2)
-                        alert("密码不能超过6位数字");
+                        $scope.myAlert("密码不能超过6位数字");
                     else if(response == 3)
-                        alert("密码必须由纯数字组成");
+                        $scope.myAlert("密码必须由纯数字组成");
                     else if(response == 1){
-                        $scope.user.password = $scope.personalMsg.password;
-                        alert("密码修改成功");
+                        $scope.user.password = oldPassword;
+                        $scope.myAlert("密码修改成功");
                     }
                 })
                 .error(function (response) {
-                    alert("连接服务器失败");
+                    $scope.myAlert("连接服务器失败");
                 })
         }
 
@@ -133,7 +138,7 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
         })
             .success(function (response) {
                 if(response == 0)
-                    alert("未找到搜索的脑书");
+                    $scope.myAlert("未找到搜索的脑书");
                 else{
                     if(response.user){
                         $scope.userSearchShow = 1;
@@ -150,7 +155,7 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
                 }
             })
             .error(function (response) {
-                alert("连接服务器失败")
+                $scope.myAlert("连接服务器失败")
             })
     };
 
@@ -167,7 +172,7 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
                 $scope.needCheck();
             })
             .error(function (response) {
-                alert("连接服务器失败")
+                $scope.myAlert("连接服务器失败")
             })
     };
 
@@ -207,21 +212,21 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
                         }
                     })
                     .error(function(response){
-                        alert("连接服务器失败");
+                        $scope.myAlert("连接服务器失败");
                     });
 
                 //更新评论数量
                 $scope.showData[index+1].ctNum++;
             })
             .error(function(response){
-                alert("连接服务器失败");
+                $scope.myAlert("连接服务器失败");
             });
     };
 
     //打开个人中心
     $scope.openPersonal = function () {
         if($scope.isLogined == 0) {
-            alert("请先登录！");
+            $scope.myAlert("请先登录！");
             return;
         }
         $scope.personalShow = 1;
@@ -231,7 +236,7 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
     $scope.openComment = function (index,ntId) {
         //检测是否已登录
         if($scope.isLogined == 0) {
-            alert("请先登录！");
+            $scope.myAlert("请先登录！");
             return;
         }
 
@@ -263,7 +268,7 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
                     }
                 })
                 .error(function(response){
-                    alert("连接服务器失败");
+                    $scope.myAlert("连接服务器失败");
                 });
         }
     };
@@ -283,7 +288,7 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
     $scope.follow = function (followId) {
         //检测是否已登录
         if($scope.isLogined == 0) {
-            alert("请先登录！");
+            $scope.myAlert("请先登录！");
             return;
         }
 
@@ -295,21 +300,21 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
         })
             .success(function(response){
                 if(response == 1){
-                    alert("关注成功");
+                    $scope.myAlert("关注成功");
                     $scope.user.follow++;
                 }
                 else if(response == 0){
-                    alert("已取消关注");
+                    $scope.myAlert("已取消关注");
                     $scope.user.follow--;
                 }
                 else if(response == 2)
-                    alert("怎么可以自己关注自己？");
+                    $scope.myAlert("怎么可以自己关注自己？");
                 else
                     console.log(response);
-                    // alert(response);
+                    // $scope.myAlert(response);
             })
             .error(function(response){
-                alert("连接服务器失败");
+                $scope.myAlert("连接服务器失败");
             });
     };
     
@@ -373,7 +378,7 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
     //脑书管理页面跳转
     $scope.toMyNaoshu = function () {
         if($scope.isLogined == 0) {
-            alert("请先登录！");
+            $scope.myAlert("请先登录！");
             return;
         }
         window.location.href = "naoshu.html";
@@ -393,11 +398,11 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
                 if(response)
                     $scope.changeNaoshu(response);
                 else
-                    alert("该用户尚未创建任何脑书");
+                    $scope.myAlert("该用户尚未创建任何脑书");
                 $scope.initShow();
             })
             .error(function(response){
-                alert("连接服务器失败");
+                $scope.myAlert("连接服务器失败");
             });
     };
 
@@ -409,7 +414,7 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
     //跳转到个人中心
     $scope.toPersonal = function () {
         if($scope.isLogined == 0) {
-            alert("请先登录！");
+            $scope.myAlert("请先登录！");
             return;
         }
         console.log("123");
@@ -421,7 +426,7 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
         $scope.personalShow = 0;
 
         if($scope.isLogined == 0) {
-            alert("请先登录！");
+            $scope.myAlert("请先登录！");
             return;
         }
 
@@ -438,11 +443,11 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
                     $scope.searchUser = response;
                 }
                 else{
-                    alert("可惜了，你还没有任何粉丝");
+                    $scope.myAlert("可惜了，你还没有任何粉丝");
                 }
             })
             .error(function(response){
-                alert("连接服务器失败");
+                $scope.myAlert("连接服务器失败");
             });
     };
 
@@ -452,7 +457,7 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
         $scope.personalShow = 0;
 
         if($scope.isLogined == 0) {
-            alert("请先登录！");
+            $scope.myAlert("请先登录！");
             return;
         }
 
@@ -470,18 +475,18 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
                     console.log(response);
                 }
                 else {
-                    alert("你还没关注任何人");
+                    $scope.myAlert("你还没关注任何人");
                 }
             })
             .error(function(response){
-                alert("连接服务器失败");
+                $scope.myAlert("连接服务器失败");
             });
     };
 
     //脑书跳转
     $scope.jumpTo = function (visitedId,ntId) {
         if($scope.isLogined == 0) {
-            alert("请先登录！");
+            $scope.myAlert("请先登录！");
             return;
         }
         localStorage.myNtId = ntId;
@@ -501,7 +506,7 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
         })
             .success(function(response){
                 if(response == 1){
-                    alert("注册成功");
+                    $scope.myAlert("注册成功");
                 }
                 else{
                     $scope.registerAlertShow = 1;
@@ -537,7 +542,7 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
     $scope.thumbsUp = function (index,ntId) {
         //检测是否已登录
         if($scope.isLogined == 0) {
-            alert("请先登录！");
+            $scope.myAlert("请先登录！");
             return;
         }
 
@@ -557,17 +562,17 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
                     $scope.showData[index+1].thumbsUpClass = "";
                 }
                 else
-                    alert(response);
+                    $scope.myAlert(response);
             })
             .error(function(response){
-                alert("连接服务器失败");
+                $scope.myAlert("连接服务器失败");
             });
     };
 
     //收藏函数
     $scope.star = function (ntId) {
         if($scope.isLogined == 0) {
-            alert("请先登录！");
+            $scope.myAlert("请先登录！");
             return;
         }
         $http({
@@ -578,15 +583,15 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
         })
             .success(function(response){
                 if(response == 1){
-                    alert("收藏成功");
+                    $scope.myAlert("收藏成功");
                 }
                 else if(response == 0)
-                    alert("已取消收藏");
+                    $scope.myAlert("已取消收藏");
                 else
-                    alert(response);
+                    $scope.myAlert(response);
             })
             .error(function(response){
-                alert("连接服务器失败");
+                $scope.myAlert("连接服务器失败");
             });
     };
 
@@ -597,7 +602,7 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
 
         $scope.initShow();
         if($scope.isLogined == 0) {
-            alert("请先登录！");
+            $scope.myAlert("请先登录！");
             return;
         }
         $http({
@@ -608,7 +613,7 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
         })
             .success(function(response){
                 if(response == 0) {
-                    alert("你还没有收藏任何脑书");
+                    $scope.myAlert("你还没有收藏任何脑书");
                 }
                 else {
                     $scope.changeNaoshu(response);
@@ -616,7 +621,7 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
 
             })
             .error(function(response){
-                alert("连接服务器失败");
+                $scope.myAlert("连接服务器失败");
             });
     };
 
@@ -671,5 +676,19 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
         $scope.alertShow = 0;
         $scope.serverFail = 0;
         $scope.loginFail = 0;
+    };
+
+    // 弹窗
+    //关闭所有弹窗
+    $scope.closePopup = function () {
+        $scope.myAlertShow = 0;
+        $scope.popupAnimate = "marginTop40";
+    };
+
+    //警告框
+    $scope.myAlert = function (message) {
+        $scope.myAlertShow = 1;
+        $scope.alertMsg = message;
+        $scope.popupAnimate = "marginTop0";
     };
 });

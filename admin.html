@@ -6,9 +6,8 @@
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     <!--<link rel="stylesheet" type="text/css" href="css/reset.css">-->
     <link rel="stylesheet" type="text/css" href="css/admin.css">
-
 </head>
-<body ng-app="myApp" ng-controller="myCtrl" data-spy="scroll" data-target="#myScrollspy" >
+<body ng-app="myApp" ng-controller="myCtrl" ng-init="adminInit()" ng-cloak class="ng-cloak" data-spy="scroll" data-target="#myScrollspy">
     <!--登录界面-->
     <form class="login form-horizontal jumbotron" ng-hide="isLogined" ng-submit="login()" role="form" novalidate>
         <fieldset class="container">
@@ -145,6 +144,29 @@
                 <br>
                 <br>
                 </div>
+        </div>
+    </div>
+
+    <!--提示弹窗-->
+    <div class="popupOutContainer" ng-show="myAlertShow">
+        <div class="popupInContainer" ng-class="popupAnimate">
+            <div class="popupTop"><img src="img/alertLogo.png"></div>
+            <div class="popupArticle">{{alertMsg}}</div>
+            <div class="popupBtn">
+                <button class="btn btn-default" ng-click="closePopup()">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <!--确认弹窗-->
+    <div class="popupOutContainer" ng-show="myConfirmShow">
+        <div class="popupInContainer" ng-class="popupAnimate">
+            <div class="popupTop"><img src="img/alertLogo.png"></div>
+            <div class="popupArticle">{{confirmMsg}}</div>
+            <div class="popupBtn">
+                <button class="btn btn-default" ng-click="confirmTrue()">确定</button>
+                <button class="btn btn-default" ng-click="closePopup()">取消</button>
+            </div>
         </div>
     </div>
 

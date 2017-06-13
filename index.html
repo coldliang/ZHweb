@@ -10,7 +10,7 @@
 
     </style>
 </head>
-<body ng-app="xiongmaoApp" ng-controller="xiongmaoCtrl" ng-init="myOnInit()">
+<body ng-app="xiongmaoApp" ng-controller="xiongmaoCtrl" ng-init="myOnInit()" ng-cloak class="ng-cloak">
 
 <!--头部-->
 <header>
@@ -61,7 +61,7 @@
                     </div>
                     <div class="col-sm-4">
                         <span class="glyphicon glyphicon-star pull-right followBtn" title="关注" ng-click="follow(x.userId)"></span>
-                        <img title="查看大图" ng-src="{{x.png}}+'?'+{{x.ntId}}" class="pull-right img-right" ng-click="openBigPng($index)">
+                        <img ng-src="{{x.png}}+'?'+{{x.ntId}}" class="pull-right img-right" ng-click="openBigPng($index)">
 
                         <!--图片模态框-->
                         <div class="modalPngContainer" ng-class="x.modalBackClass">
@@ -228,9 +228,6 @@
             </div>
         </aside>
         <!--用户栏结束-->
-
-
-
     </div>
 </div>
 <footer>
@@ -239,6 +236,17 @@
         <a href="admin.html" style="color: #3A80C0">管理登录</a>
     </div>
 </footer>
+
+<!--提示弹窗-->
+<div class="popupOutContainer" ng-show="myAlertShow">
+    <div class="popupInContainer" ng-class="popupAnimate">
+        <div class="popupTop"><img src="img/alertLogo.png"></div>
+        <div class="popupArticle">{{alertMsg}}</div>
+        <div class="popupBtn">
+            <button class="btn btn-default" ng-click="closePopup()">确定</button>
+        </div>
+    </div>
+</div>
 
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>

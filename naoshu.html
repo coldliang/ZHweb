@@ -57,9 +57,69 @@
             color: #393F4F;
             text-decoration: underline;
         }
+
+        .popupOutContainer {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 4;
+            display: flex;
+            justify-content:center;
+            align-items:Center;
+        }
+
+        .popupInContainer {
+            width: 450px;
+            border-radius: 12px;
+            border: 1px solid silver;
+            box-shadow: 0 0 5px #888888;
+            background-color: white;
+            transition: margin 0.7s ease;
+        }
+
+        .popupTop {
+            width: 100%;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            background-color: rgb(248,248,248);
+        }
+
+        .popupArticle {
+            height: 90px;
+            padding: 20px 10px;
+            font-size: 16px;
+        }
+
+        .popupTop img {
+            width: 20px;
+            height: 20px;
+        }
+
+        .popupBtn {
+            width: 100%;
+            height: 45px;
+            padding: 5px;
+            text-align: right;
+        }
+
+        .marginTop40 {
+            margin-top: -40px;
+        }
+
+        .marginTop0 {
+            margin-top: 0;
+        }
+
+        /*页面闪烁解决办法*/
+        .ng-cloak {
+            display: none;
+        }
     </style>
 </head>
-<body ng-app="xiongmaoApp" ng-controller="xiongmaoCtrl">
+<body ng-app="xiongmaoApp" ng-controller="xiongmaoCtrl" ng-init="naoshuInit()" ng-cloak class="ng-cloak">
 <header>
     <span class="pull-left">智慧脑书</span>
     <div class="pull-right dropdown">
@@ -117,14 +177,52 @@
         </table>
     </div>
 </article>
+<!--提示弹窗-->
+<div class="popupOutContainer" ng-show="myAlertShow">
+    <div class="popupInContainer" ng-class="popupAnimate">
+        <div class="popupTop"><img src="img/alertLogo.png"></div>
+        <div class="popupArticle">{{alertMsg}}</div>
+        <div class="popupBtn">
+            <button class="btn btn-default" ng-click="closePopup()">确定</button>
+        </div>
+    </div>
+</div>
+
+<!--确认弹窗-->
+<div class="popupOutContainer" ng-show="myConfirmShow">
+    <div class="popupInContainer" ng-class="popupAnimate">
+        <div class="popupTop"><img src="img/alertLogo.png"></div>
+        <div class="popupArticle">{{confirmMsg}}</div>
+        <div class="popupBtn">
+            <button class="btn btn-default" ng-click="confirmTrue()">确定</button>
+            <button class="btn btn-default" ng-click="closePopup()">取消</button>
+        </div>
+    </div>
+</div>
+
 
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/angular.min.js"></script>
+<script src="js/angular-animate.min.js"></script>
 
 <script>
-    var app = angular.module('xiongmaoApp', []);
+    var app = angular.module('xiongmaoApp', ['ngAnimate']);
     app.controller('xiongmaoCtrl', function($scope,$http,$location) {
+        $scope.naoshuInit = function () {
+//            弹窗初始化
+            $scope.myAlertShow = 0;
+            $scope.myConfirmShow = 0;
+            $scope.popupAnimate = "marginTop40";
+
+            $scope.rename = {};
+            $scope.user = {};
+            $scope.naoshuData = {};
+            $scope.needCheck();
+
+            $scope.deletedNtId = 0;//需要删除的脑书ID
+        };
+
         //检测cookie函数
         $scope.needCheck = function(){
             $http.get("php/check.php")
@@ -140,7 +238,7 @@
                         }
                     })
                     .error(function(response){
-                        console.log("服务器请求失败");
+                        $scope.myAlert("服务器请求失败");
                     });
         };
 
@@ -163,23 +261,42 @@
 
         //删除函数
         $scope.deleteNt = function (ntId,ntName) {
-            var r = confirm("确定删除 "+ntName+" ?");
-            if(r === true)
-            {
+            $scope.deletedNtId = ntId;
+            $scope.confirmTrue = function () {
                 $http({
                     method: 'post',
                     url: 'php/deleteNt.php',
-                    data: ntId,
+                    data: $scope.deletedNtId,
                     headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
                 })
                     .success(function(response){
                         $scope.tableInit();
-                        alert("删除成功");
+                        $scope.myAlert("删除成功");
                     })
                     .error(function(response){
-                        alert("连接服务器失败");
+                        $scope.myAlert("连接服务器失败");
                     });
-            }
+                $scope.closePopup();
+            };
+            $scope.myConfirm("确定删除 "+ntName+" ?");
+
+//            var r = confirm("确定删除 "+ntName+" ?");
+//            if(r === true)
+//            {
+//                $http({
+//                    method: 'post',
+//                    url: 'php/deleteNt.php',
+//                    data: ntId,
+//                    headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+//                })
+//                    .success(function(response){
+//                        $scope.tableInit();
+//                        $scope.myAlert("删除成功");
+//                    })
+//                    .error(function(response){
+//                        $scope.myAlert("连接服务器失败");
+//                    });
+//            }
         };
 
         //退出函数
@@ -195,7 +312,7 @@
                     $scope.needCheck();
                 })
                 .error(function (response) {
-                    alert("连接服务器失败")
+                    $scope.myAlert("连接服务器失败")
                 });
             window.location.href = "index.html";
         };
@@ -217,7 +334,7 @@
                         $scope.tableInit();
                     })
                     .error(function(response){
-                        alert("连接服务器失败");
+                        $scope.myAlert("连接服务器失败");
                     });
             }
         };
@@ -239,7 +356,7 @@
                         $scope.tableInit();
                     })
                     .error(function(response){
-                        alert("连接服务器失败");
+                        $scope.myAlert("连接服务器失败");
                     });
             }
         };
@@ -257,10 +374,25 @@
             window.location.href = "dist/index.html";
         };
 
-        $scope.rename = {};
-        $scope.user = {};
-        $scope.naoshuData = {};
-        $scope.needCheck();
+        //关闭所有弹窗
+        $scope.closePopup = function () {
+            $scope.myAlertShow = 0;
+            $scope.myConfirmShow = 0;
+            $scope.popupAnimate = "marginTop40";
+        };
+
+        //警告框
+        $scope.myAlert = function (message) {
+            $scope.myAlertShow = 1;
+            $scope.alertMsg = message;
+            $scope.popupAnimate = "marginTop0";
+        };
+
+        $scope.myConfirm = function (message) {
+            $scope.confirmMsg = message;
+            $scope.myConfirmShow = 1;
+            $scope.popupAnimate = "marginTop0";
+        };
     });
 </script>
 </body>

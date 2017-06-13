@@ -2,57 +2,182 @@
 <html>
 <head>
     <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/reset.css">
 </head>
 <style>
     body {
-        padding: 0;
-        margin: 0;
+        width: 100%;
+        height: 100%;
     }
 
-    .back {
+    .popupOutContainer {
         position: fixed;
-        width: 0;
-        height: 0;
+        width: 100%;
+        height: 100%;
         top: 0;
         left: 0;
-        z-index: 5;
-        background-color: rgba(0,0,0,0.8);
-        text-align: center;
-        display: -webkit-box;
-        -webkit-box-pack:center;
-        -webkit-box-align:center;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
+        z-index: 4;
+        display: flex;
+        justify-content:center;
+        align-items:Center;
     }
 
-    #img {
-        width: 0;
-        height: 0;
-        transition: width 2s,height 2s;
+    .popupInContainer {
+        width: 450px;
+        border-radius: 12px;
+        border: 1px solid silver;
+        box-shadow: 0 0 5px #888888;
+        background-color: white;
+        transition: margin 0.7s ease;
+    }
+
+    .popupTop {
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        background-color: rgb(248,248,248);
+    }
+
+    .popupArticle {
+        height: 90px;
+        padding: 20px 10px;
+        font-size: 16px;
+        overflow: visible;
+    }
+
+    .popupTop img {
+        width: 20px;
+        height: 20px;
+    }
+
+    .popupBtn {
+        width: 100%;
+        height: 45px;
+        padding: 5px;
+        text-align: right;
+    }
+
+    .marginTop40 {
+        margin-top: -40px;
+    }
+
+    .marginTop0 {
+        margin-top: 0;
     }
 </style>
-<body>
-<button onclick="openModel()">打开</button>
-<div class="realBack">
-    <div id="back" class="back">
-        <img id="img" src="png/1.png">
+<body ng-app="xiongmaoApp" ng-controller="xiongmaoCtrl" ng-init="myInit()">
+
+<!--提示弹窗-->
+<div class="popupOutContainer" ng-show="myAlertShow">
+    <div class="popupInContainer" ng-class="popupAnimate">
+        <div class="popupTop"><img src="img/alertLogo.png"></div>
+        <div class="popupArticle">{{alertMsg}}</div>
+        <div class="popupBtn">
+            <button class="btn btn-default" ng-click="closePopup()">确定</button>
+        </div>
     </div>
 </div>
 
+<!--确认弹窗-->
+<div class="popupOutContainer" ng-show="myConfirmShow">
+    <div class="popupInContainer" ng-class="popupAnimate">
+        <div class="popupTop"><img src="img/alertLogo.png"></div>
+        <div class="popupArticle">{{confirmMsg}}</div>
+        <div class="popupBtn">
+            <button class="btn btn-default" ng-click="confirmTrue()">确定</button>
+            <button class="btn btn-default" ng-click="closePopup()">取消</button>
+        </div>
+    </div>
+</div>
 
+<!--信息弹窗-->
+<div class="popupOutContainer" ng-show="myPromptShow">
+    <div class="popupInContainer" ng-class="popupAnimate">
+        <div class="popupTop"><img src="img/alertLogo.png"></div>
+        <div class="popupArticle">
+            <label>{{promptMsg}}</label>
+            <input type="text" class="form-control" ng-model="promptInput">
+        </div>
+        <div class="popupBtn">
+            <button type="submit" class="btn btn-default" ng-click="promptTrue()">确定</button>
+            <button class="btn btn-default" ng-click="closePopup()">取消</button>
+        </div>
+    </div>
+</div>
+
+<button ng-click="toAlert()">提示弹窗</button>
+<button ng-click="toConfirm()">确认弹窗</button>
+<button ng-click="toPrompt()">回执信息弹窗</button>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/angular.min.js"></script>
+<script src="js/angular-animate.min.js"></script>
 <script>
-    var winH = window.innerHeight;
-    var winW = window.innerWidth;
-    var back = document.getElementById("back");
-    var img = document.getElementById("img");
-//    back.style.width = winW+'px';
-//    back.style.height = winH+'px';
-    var openModel = function () {
-        back.style.width = winW+'px';
-        back.style.height = winH+'px';
-        img.style.width = "auto";
-        img.style.height = "auto";
-    };
+    var app = angular.module('xiongmaoApp', ['ngAnimate']);
+    app.controller('xiongmaoCtrl', function($scope,$http) {
+        $scope.myAlertShow = 0;
+        $scope.myConfirmShow = 0;
+        $scope.myPromptShow = 0;
+        $scope.popupAnimate = "marginTop40";
+
+        //关闭所有弹窗
+        $scope.closePopup = function () {
+            $scope.myAlertShow = 0;
+            $scope.myConfirmShow = 0;
+            $scope.myPromptShow = 0;
+            $scope.promptInput = "";
+            $scope.popupAnimate = "marginTop40";
+        };
+
+        //警告框
+        $scope.myAlert = function (message) {
+            $scope.myAlertShow = 1;
+            $scope.alertMsg = message;
+            $scope.popupAnimate = "marginTop0";
+        };
+
+        $scope.toAlert = function () {
+            $scope.myAlert("来测试一下这个弹窗");
+        };
+
+//        确认框
+        $scope.myConfirm = function (message) {
+            $scope.confirmMsg = message;
+            $scope.myConfirmShow = 1;
+            $scope.popupAnimate = "marginTop0";
+        };
+
+        $scope.toConfirm = function () {
+            $scope.confirmTrue = function (){
+                $scope.closePopup();
+                alert("1");
+            };
+            $scope.myConfirm("确认框");
+        };
+
+        //信息框
+        $scope.myPrompt = function (message) {
+            $scope.promptMsg = message;
+            $scope.myPromptShow = 1;
+            $scope.popupAnimate = "marginTop0";
+        };
+
+        $scope.toPrompt = function () {
+            $scope.promptTrue = function (){
+                $scope.promptTrue = function () {
+                    alert("123");
+                    $scope.closePopup();
+                };
+                alert($scope.promptInput);
+                $scope.closePopup();
+                $scope.myPrompt("信息框2");
+            };
+            $scope.myPrompt("信息框");
+        };
+    });
 </script>
 </body>
 </html>

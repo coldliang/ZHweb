@@ -45,9 +45,69 @@
 			left: 0;
 			right: 0;
 		}
+
+        /*弹窗CSS*/
+        .popupOutContainer {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            display: flex;
+            justify-content:center;
+            align-items:Center;
+        }
+
+        .popupInContainer {
+            width: 450px;
+            border-radius: 12px;
+            border: 1px solid silver;
+            box-shadow: 0 0 5px #888888;
+            background-color: white;
+        }
+
+        .popupTop {
+            width: 100%;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            background-color: rgb(248,248,248);
+        }
+
+        .popupArticle {
+            height: 90px;
+            padding: 20px 10px;
+            font-size: 16px;
+        }
+
+        .popupTop img {
+            width: 20px;
+            height: 20px;
+        }
+
+        .popupBtn {
+            width: 100%;
+            height: 45px;
+            padding: 5px;
+            text-align: right;
+        }
+
+        .marginTop40 {
+            margin-top: -40px;
+        }
+
+        .marginTop0 {
+            margin-top: 0;
+        }
+
+        /*页面闪烁解决办法*/
+        .ng-cloak {
+            display: none;
+        }
 	</style>
 </head>
-<body ng-app="kityminderDemo" ng-controller="MainController">
+<body ng-app="kityminderDemo" ng-controller="MainController" ng-cloak class="ng-cloak">
 <h1 class="editor-title">KityMinder Editor - Powered By FEX
 	<button class="btn btn-default" ng-hide="visit" ng-click="saveForJson()">保存</button>
     <button class="btn btn-default" ng-show="visit" ng-click="copyToMy()">复制为自己脑书</button>
@@ -74,6 +134,33 @@
     </span>
 </h1>
 <kityminder-editor on-init="initEditor(editor, minder)"></kityminder-editor>
+
+<!--提示弹窗-->
+<div class="popupOutContainer" ng-show="myAlertShow">
+    <div class="popupInContainer">
+        <div class="popupTop"><img src="../img/alertLogo.png"></div>
+        <div class="popupArticle">{{alertMsg}}</div>
+        <div class="popupBtn">
+            <button class="btn btn-default" ng-click="closePopup()">确定</button>
+        </div>
+    </div>
+</div>
+
+<!--信息弹窗-->
+<div class="popupOutContainer" ng-show="myPromptShow">
+    <div class="popupInContainer" ng-class="popupAnimate">
+        <div class="popupTop"><img src="../img/alertLogo.png"></div>
+        <div class="popupArticle">
+            <label>{{promptMsg}}</label>
+            <input type="text" class="form-control" ng-model="promptInput">
+        </div>
+        <div class="popupBtn">
+            <button type="submit" class="btn btn-default" ng-click="promptTrue()">确定</button>
+            <button class="btn btn-default" ng-click="closePopup()">取消</button>
+        </div>
+    </div>
+</div>
+
 </body>
 
 <!-- bower:js -->
@@ -115,64 +202,77 @@
 					if(localStorage.myUserId !== localStorage.visitedId && localStorage.visitedId != 0){
 					    $scope.visit = 1;
                     }
-				};
 
-                //kityMinder初始化
-                $http({
-                    method: 'post',
-                    url: '../php/kityCheck.php',
-                    data: localStorage.myNtId,
-                    headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
-                })
-                    .success(function(response){
-                        if(response !== 0){
-                            editor.minder.importJson(response);
-                        }
+                    $scope.myAlertShow = 0;
+                    $scope.myPromptShow = 0;
+
+                    //kityMinder初始化
+                    $http({
+                        method: 'post',
+                        url: '../php/kityCheck.php',
+                        data: localStorage.myNtId,
+                        headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
                     })
-                    .error(function(response){
-                        alert("连接服务器失败");
-                    });
+                        .success(function(response){
+                            if(response !== 0){
+                                editor.minder.importJson(response);
+                            }
+                        })
+                        .error(function(response){
+                            $scope.myAlert("连接服务器失败");
+                        });
+				};
 
                 //保存脑书文件
                 $scope.saveForJson = function() {
                     //新建文件
                     if(localStorage.myNtId == 0){
                         $scope.newJson = {};
-                        $scope.newJson.ntName = prompt("请输入脑书名称","");
-                        if($scope.newJson.ntName !== null) {
-                            if($scope.newJson.ntName !== "" && $scope.newJson.ntName.length <= 20) {
-                                //获取提示框数据
-                                $scope.newJson.abstract = prompt("请写摘要","这家伙很懒，没写简介");
-                                if($scope.newJson.abstract !== null){
-                                    //导入JSON数据
-                                    $scope.newJson.jsonMsg = editor.minder.exportJson();
-                                    //导入脑图ID
-                                    $scope.newJson.userId = localStorage.myUserId;
-                                    //导入png图片数据
-                                    editor.minder.exportData("png").then(function (content) {
-                                        $scope.newJson.png = content;
-                                        $http({
-                                            method: 'post',
-                                            url: '../php/save.php',
-                                            data: $scope.newJson,
-                                            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
-                                        })
-                                            .success(function(response){
-                                                if(response.length < 7){
-                                                    localStorage.myNtId = response;
-                                                    alert("保存成功");
-                                                    console.log(response);
-                                                }
-                                                else alert(response);
-                                            })
-                                            .error(function(response){
-                                                alert("连接服务器失败");
+                        $scope.promptTrue = function () {
+                            $scope.newJson.ntName = $scope.promptInput;
+                            $scope.closePopup();
+                            if($scope.newJson.ntName !== null) {
+                                if($scope.newJson.ntName !== "" && $scope.newJson.ntName.length <= 20) {
+                                    //初始化弹窗输入框
+                                    $scope.promptInput = "这家伙很懒，没写简介";
+                                    $scope.promptTrue = function () {
+                                        $scope.newJson.abstract = $scope.promptInput;
+                                        if($scope.newJson.abstract !== ""){
+                                            //导入JSON数据
+                                            $scope.newJson.jsonMsg = editor.minder.exportJson();
+                                            //导入脑图ID
+                                            $scope.newJson.userId = localStorage.myUserId;
+                                            //导入png图片数据
+                                            editor.minder.exportData("png").then(function (content) {
+                                                $scope.newJson.png = content;
+                                                $http({
+                                                    method: 'post',
+                                                    url: '../php/save.php',
+                                                    data: $scope.newJson,
+                                                    headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+                                                })
+                                                    .success(function(response){
+                                                        if(response.length < 7){
+                                                            localStorage.myNtId = response;
+                                                            $scope.myAlert("保存成功");
+                                                            console.log(response);
+                                                        }
+                                                        else $scope.myAlert(response);
+                                                    })
+                                                    .error(function(response){
+                                                        $scope.myAlert("连接服务器失败");
+                                                    });
                                             });
-                                    });
+                                            $scope.closePopup();
+                                        }
+                                        $scope.closePopup();
+                                    };
+                                    $scope.myPrompt("请写简介：");
                                 }
+                                else $scope.myAlert("脑书名称非法");
                             }
-                            else alert("脑书名称非法");
-                        }
+                        };
+                        $scope.myPrompt("请输入脑书名称：");
                     }
                     //修改文件
                     else {
@@ -189,13 +289,12 @@
                             })
                                 .success(function(response){
                                     if(response.length < 2){
-                                        alert("修改成功");
-                                        console.log(response);
+                                        $scope.myAlert("修改成功");
                                     }
                                     else console.log(response);
                                 })
                                 .error(function(response){
-                                    alert("连接服务器失败");
+                                    $scope.myAlert("连接服务器失败");
                                 });
                         });
                     }
@@ -212,48 +311,58 @@
 //                        });
                 };
 
+//                将他人脑书复制为自己脑书
                 $scope.copyToMy = function () {
                     $scope.newJson = {};
-                    $scope.newJson.ntName = prompt("请输入脑书名称","");
-                    if($scope.newJson.ntName !== null) {
-                        if($scope.newJson.ntName !== "" && $scope.newJson.ntName.length <= 20) {
-                            //获取提示框数据
-                            $scope.newJson.abstract = prompt("请写摘要","这家伙很懒，没写简介");
-                            if($scope.newJson.abstract !== null){
-                                //导入JSON数据
-                                $scope.newJson.jsonMsg = editor.minder.exportJson();
-                                //导入脑图ID
-                                $scope.newJson.userId = localStorage.myUserId;
-                                //导入png图片数据
-                                editor.minder.exportData("png").then(function (content) {
-                                    $scope.newJson.png = content;
-                                    $http({
-                                        method: 'post',
-                                        url: '../php/save.php',
-                                        data: $scope.newJson,
-                                        headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
-                                    })
-                                        .success(function(response){
-                                            if(response.length < 7){
-                                                localStorage.myNtId = response;
-                                                alert("复制成功");
-                                                localStorage.visitedId = localStorage.myUserId;
-                                                $scope.visit = 0;
-                                                console.log(response);
-                                            }
-                                            else {
-                                                alert(response);
-                                                console.log(response);
-                                            }
-                                        })
-                                        .error(function(response){
-                                            alert("连接服务器失败");
+                    $scope.promptTrue = function () {
+                        $scope.newJson.ntName = $scope.promptInput;
+                        $scope.closePopup();
+                        if($scope.newJson.ntName !== null) {
+                            if($scope.newJson.ntName !== "" && $scope.newJson.ntName.length <= 20) {
+                                $scope.promptInput = "这家伙很懒，没写简介";
+                                $scope.promptTrue = function () {
+                                    $scope.newJson.abstract = $scope.promptInput;
+                                    if($scope.newJson.abstract !== ""){
+                                        //导入JSON数据
+                                        $scope.newJson.jsonMsg = editor.minder.exportJson();
+                                        //导入脑图ID
+                                        $scope.newJson.userId = localStorage.myUserId;
+                                        //导入png图片数据
+                                        editor.minder.exportData("png").then(function (content) {
+                                            $scope.newJson.png = content;
+                                            $http({
+                                                method: 'post',
+                                                url: '../php/save.php',
+                                                data: $scope.newJson,
+                                                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+                                            })
+                                                .success(function(response){
+                                                    if(response.length < 7){
+                                                        localStorage.myNtId = response;
+                                                        $scope.myAlert("复制成功");
+                                                        localStorage.visitedId = localStorage.myUserId;
+                                                        $scope.visit = 0;
+                                                        console.log(response);
+                                                    }
+                                                    else {
+                                                        $scope.myAlert(response);
+                                                        console.log(response);
+                                                    }
+                                                })
+                                                .error(function(response){
+                                                    $scope.myAlert("连接服务器失败");
+                                                });
                                         });
-                                });
+                                        $scope.closePopup();
+                                    }
+                                    $scope.closePopup();
+                                };
+                                $scope.myPrompt("请写简介：");
                             }
+                            else $scope.myAlert("脑书名称非法");
                         }
-                        else alert("脑书名称非法");
-                    }
+                    };
+                    $scope.myPrompt("请输入脑书名称：");
                 };
 
                 //退出函数
@@ -269,7 +378,7 @@
                             $scope.needCheck();
                         })
                         .error(function (response) {
-                            alert("连接服务器失败")
+                            $scope.myAlert("连接服务器失败")
                         });
                     window.location.href = "../index.html";
                 };
@@ -308,14 +417,33 @@
                             headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
                         })
                             .success(function(response){
-                                alert(response);
+                                $scope.myAlert(response);
                             })
                             .error(function(response){
-                                alert("连接服务器失败");
+                                $scope.myAlert("连接服务器失败");
                             });
                     });
                 };
 
+                //关闭所有弹窗
+                $scope.closePopup = function () {
+                    $scope.myAlertShow = 0;
+                    $scope.myPromptShow = 0;
+                    $scope.promptInput = "";
+                };
+
+                //警告框
+                $scope.myAlert = function (message) {
+                    $scope.myAlertShow = 1;
+                    $scope.alertMsg = message;
+                };
+
+                //信息框
+                $scope.myPrompt = function (message) {
+                    $scope.promptMsg = message;
+                    $scope.myPromptShow = 1;
+                    $scope.popupAnimate = "marginTop0";
+                };
 			});
 
 </script>

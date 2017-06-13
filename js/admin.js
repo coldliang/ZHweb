@@ -3,35 +3,43 @@
  */
 var app = angular.module('myApp', ['ngAnimate']);
 app.controller('myCtrl', function($scope,$http) {
-    $scope.isLogined = sessionStorage.adminIsLogined;
-    $scope.admin = {};
+    $scope.adminInit = function () {
+        $scope.isLogined = sessionStorage.adminIsLogined;
+        $scope.admin = {};
 
-    //获取用户数据
-    $http.get("php/getUser.php")
-        .success(function(response){
-            $scope.userMsg = response;
-        })
-        .error(function(response){
-            alert("连接服务器失败");
-        });
+        //获取用户数据
+        $http.get("php/getUser.php")
+            .success(function(response){
+                $scope.userMsg = response;
+            })
+            .error(function(response){
+                $scope.myAlert("连接服务器失败");
+            });
 
-    //获取脑书数据
-    $http.get("php/getNaoshu.php")
-        .success(function(response){
-            $scope.naoshuMsg = response;
-        })
-        .error(function(response){
-            alert("连接服务器失败");
-        });
+        //获取脑书数据
+        $http.get("php/getNaoshu.php")
+            .success(function(response){
+                $scope.naoshuMsg = response;
+            })
+            .error(function(response){
+                $scope.myAlert("连接服务器失败");
+            });
 
-    //获取评论数据
-    $http.get("php/getComment.php")
-        .success(function(response){
-            $scope.commentMsg = response;
-        })
-        .error(function(response){
-            alert("连接服务器失败");
-        });
+        //获取评论数据
+        $http.get("php/getComment.php")
+            .success(function(response){
+                $scope.commentMsg = response;
+            })
+            .error(function(response){
+                $scope.myAlert("连接服务器失败");
+            });
+
+        // 弹窗初始化
+        $scope.myAlertShow = 0;
+        $scope.myConfirmShow = 0;
+        $scope.popupAnimate = "marginTop40";
+        $scope.deletedNtId = 0;
+    };
 
     //提交登录
     $scope.login = function () {
@@ -43,7 +51,7 @@ app.controller('myCtrl', function($scope,$http) {
         })
             .success(function (response) {
                 if(response == 0){
-                    alert("登录失败");
+                    $scope.myAlert("登录失败");
                 }
                 else{
                     $scope.isLogined = 1;
@@ -53,7 +61,7 @@ app.controller('myCtrl', function($scope,$http) {
 
             })
             .error(function (response) {
-                alert("连接服务器失败");
+                $scope.myAlert("连接服务器失败");
             });
     };
 
@@ -68,17 +76,17 @@ app.controller('myCtrl', function($scope,$http) {
             })
                 .success(function (response) {
                     if(response == 2)
-                        alert("名字太长，不能超过20个字符");
+                        $scope.myAlert("名字太长，不能超过20个字符");
                     else if(response == 3)
-                        alert("名字重复");
+                        $scope.myAlert("名字重复");
                     else if(response == 1){
                         $scope.userMsg[index+1].name = $scope.userMsg[index+1].rename;
                         $scope.userMsg[index+1].rename = "";
-                        alert("名字修改成功");
+                        $scope.myAlert("名字修改成功");
                     }
                 })
                 .error(function (response) {
-                    alert("连接服务器失败");
+                    $scope.myAlert("连接服务器失败");
                 });
 
             $scope.userMsg[index+1].nameShow = 0;
@@ -99,15 +107,15 @@ app.controller('myCtrl', function($scope,$http) {
             })
                 .success(function (response) {
                     if(response == 2)
-                        alert("密码太长，不能超过20个字符");
+                        $scope.myAlert("密码太长，不能超过20个字符");
                     else if(response == 1){
                         $scope.userMsg[index+1].password = $scope.userMsg[index+1].repwd;
                         $scope.userMsg[index+1].repwd = "";
-                        alert("密码修改成功");
+                        $scope.myAlert("密码修改成功");
                     }
                 })
                 .error(function (response) {
-                    alert("连接服务器失败");
+                    $scope.myAlert("连接服务器失败");
                 });
 
             $scope.userMsg[index+1].pwdShow = 0;
@@ -131,7 +139,7 @@ app.controller('myCtrl', function($scope,$http) {
                     $scope.naoshuMsg[index+1].rename = "";
                 })
                 .error(function (response) {
-                    alert("连接服务器失败");
+                    $scope.myAlert("连接服务器失败");
                 });
             $scope.naoshuMsg[index+1].nameShow = 0;
         }
@@ -154,7 +162,7 @@ app.controller('myCtrl', function($scope,$http) {
                     $scope.naoshuMsg[index+1].reabstract = "";
                 })
                 .error(function (response) {
-                    alert("连接服务器失败");
+                    $scope.myAlert("连接服务器失败");
                 });
             $scope.naoshuMsg[index+1].abstractShow = 0;
         }
@@ -165,13 +173,12 @@ app.controller('myCtrl', function($scope,$http) {
 
     //删除脑书
     $scope.deleteNt = function (ntId) {
-        var r = confirm("确定要删除id为"+ntId+"的脑书?");
-        if(r === true)
-        {
+        $scope.deletedNtId = ntId;
+        $scope.confirmTrue = function () {
             $http({
                 method: 'post',
                 url: 'php/deleteNt.php',
-                data: ntId,
+                data: $scope.deletedNtId,
                 headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
             })
                 .success(function(response){
@@ -180,14 +187,16 @@ app.controller('myCtrl', function($scope,$http) {
                             $scope.naoshuMsg = response;
                         })
                         .error(function(response){
-                            alert("连接服务器失败");
+                            $scope.myAlert("连接服务器失败");
                         });
-                    alert("删除成功");
+                    $scope.myAlert("删除成功");
                 })
                 .error(function(response){
-                    alert("连接服务器失败");
+                    $scope.myAlert("连接服务器失败");
                 });
-        }
+            $scope.closePopup();
+        };
+        $scope.myConfirm("确定要删除id为"+ntId+"的脑书？");
     };
 
     //删除评论
@@ -207,12 +216,33 @@ app.controller('myCtrl', function($scope,$http) {
                         $scope.commentMsg = response;
                     })
                     .error(function(response){
-                        alert("连接服务器失败");
+                        $scope.myAlert("连接服务器失败");
                     });
             })
             .error(function(response){
-                alert("连接服务器失败");
+                $scope.myAlert("连接服务器失败");
             });
+    };
+
+    //关闭所有弹窗
+    $scope.closePopup = function () {
+        $scope.myAlertShow = 0;
+        $scope.myConfirmShow = 0;
+        $scope.popupAnimate = "marginTop40";
+    };
+
+    //警告框
+    $scope.myAlert = function (message) {
+        $scope.myAlertShow = 1;
+        $scope.alertMsg = message;
+        $scope.popupAnimate = "marginTop0";
+    };
+
+    // 确认框
+    $scope.myConfirm = function (message) {
+        $scope.confirmMsg = message;
+        $scope.myConfirmShow = 1;
+        $scope.popupAnimate = "marginTop0";
     };
 
 });
