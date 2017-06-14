@@ -16,6 +16,17 @@
     else {
         $mysqli->query("set names utf8");//插入数据库乱码解决办法
 
+        $sql = "SELECT userId FROM nt WHERE ntId = ".$postData;
+        $result = $mysqli->query($sql);
+        if ($result->num_rows > 0) {
+            // 输出每行数据
+            while($row = $result->fetch_assoc()) {
+                $userId = $row["userId"];
+            }
+        }
+        $sql = "UPDATE user SET ntNum = ntNum - 1 WHERE userId = ".$userId;
+        $mysqli->query($sql);
+
         $ntId = $postData;
         $stmt = $mysqli->prepare("DELETE FROM nt WHERE ntId=?");
         $stmt->bind_param('i',$ntId);

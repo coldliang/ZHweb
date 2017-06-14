@@ -272,6 +272,7 @@
                     .success(function(response){
                         $scope.tableInit();
                         $scope.myAlert("删除成功");
+                        console.log(response);
                     })
                     .error(function(response){
                         $scope.myAlert("连接服务器失败");

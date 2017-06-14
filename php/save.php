@@ -34,6 +34,9 @@
         $png = "png/".$ntId.".png";
         $pngData = base64_decode(substr($postData["png"],22));
 
+        $sql = "UPDATE user SET ntNum = ntNum + 1 WHERE userId = ".$postData["userId"];
+        $mysqli->query($sql);
+
         $stmt = $mysqli->prepare("INSERT INTO nt (userId, ntId, ntName, ntPath, abstract,png) VALUES (?,?,?,?,?,?)");
         $stmt->bind_param('iissss',$postData["userId"],$ntId,$postData["ntName"],$ntPath,$postData["abstract"],$png);
         file_put_contents($ntPath, json_encode($postData["jsonMsg"]));
