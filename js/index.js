@@ -406,8 +406,13 @@ app.controller('xiongmaoCtrl', function($scope,$http) {
             });
     };
 
-    //展示自己的脑书
+    //展示我的脑书
     $scope.showMyNaoshu = function () {
+        if($scope.isLogined == 0) {
+            $scope.myAlert("请先登录！");
+            return;
+        }
+
         $scope.showUserNaoshu(localStorage.myUserId);
     };
 
